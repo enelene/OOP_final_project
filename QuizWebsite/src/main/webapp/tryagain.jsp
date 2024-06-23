@@ -6,6 +6,6 @@
 </head>
 <body>
 <h1>Invalid Username or Password. Please try again.</h1>
-<a href="index.html">Go back to login page</a>
+<a href="index.jsp">Go back to login page</a>
 </body>
 </html>

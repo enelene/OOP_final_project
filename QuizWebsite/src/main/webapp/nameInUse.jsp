@@ -6,6 +6,6 @@
 </head>
 <body>
 <h1>Username already in use. Please try another.</h1>
-<a href="createAccount.html">Go back to create account page</a>
+<a href="createAccount.jsp">Go back to create account page</a>
 </body>
 </html>
