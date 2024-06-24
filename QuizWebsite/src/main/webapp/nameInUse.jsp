@@ -3,9 +3,12 @@
 <html>
 <head>
     <title>Username Taken</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-<h1>Username already in use. Please try another.</h1>
-<a href="createAccount.jsp">Go back to create account page</a>
+<div class="container">
+    <h1>Username already in use. Please try another.</h1>
+    <a href="createAccount.jsp">Go back to create account page</a>
+</div>
 </body>
 </html>

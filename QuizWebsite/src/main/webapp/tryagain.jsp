@@ -3,9 +3,12 @@
 <html>
 <head>
     <title>Login Failed</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-<h1>Invalid Username or Password. Please try again.</h1>
-<a href="index.jsp">Go back to login page</a>
+<div class="container">
+    <h1>Invalid Username or Password. Please try again.</h1>
+    <a href="index.jsp">Go back to login page</a>
+</div>
 </body>
 </html>
