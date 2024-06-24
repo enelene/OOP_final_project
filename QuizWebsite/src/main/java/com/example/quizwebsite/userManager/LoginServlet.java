@@ -31,7 +31,8 @@ public class LoginServlet extends HttpServlet {
         }
         try {
             if (mySQLDb.validatePassword(username, password)) {
-                request.getRequestDispatcher("/welcome.jsp").forward(request, response);
+                //request.getRequestDispatcher("/welcome.jsp").forward(request, response);
+                request.getRequestDispatcher("/home.jsp").forward(request, response);
             } else {
                 request.getRequestDispatcher("/tryagain.jsp").forward(request, response);
             }

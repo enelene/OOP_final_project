@@ -13,7 +13,8 @@ import javax.servlet.annotation.WebListener;
 import java.sql.SQLException;
 
 @WebListener
-public class AppContextListener implements ServletContextListener {
+public class
+AppContextListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         try {
@@ -25,7 +26,7 @@ public class AppContextListener implements ServletContextListener {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setUrl("jdbc:mysql://localhost:3306/quizwebsite");
         dataSource.setUsername("root");
-        dataSource.setPassword("Elene2004!"); //dont forget to change
+        dataSource.setPassword("Eosoxeshrca123."); //dont forget to change
 
         MySQLDb mySQLDb = new MySQLDb(dataSource);
         sce.getServletContext().setAttribute("accountManager", mySQLDb);
