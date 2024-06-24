@@ -13,24 +13,30 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import static com.example.quizwebsite.userManager.HashingManager.generateHash;
+
 @WebServlet({"/LoginServlet"})
 public class LoginServlet extends HttpServlet {
     public LoginServlet() {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        AccountManager accountManager = (AccountManager)this.getServletContext().getAttribute("accountManager");
+        MySQLDb mySQLDb = (MySQLDb) getServletContext().getAttribute("accountManager");
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         try {
-            String hashedPassword = HashingManager.generateHash(password);
+            password = generateHash(password);
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+            throw new ServletException("Error hashing password", e);
         }
-        if (accountManager.validatePassword(username, password)) {
-            request.getRequestDispatcher("/welcome.jsp").forward(request, response);
-        } else {
-            request.getRequestDispatcher("/tryagain.jsp").forward(request, response);
+        try {
+            if (mySQLDb.validatePassword(username, password)) {
+                request.getRequestDispatcher("/welcome.jsp").forward(request, response);
+            } else {
+                request.getRequestDispatcher("/tryagain.jsp").forward(request, response);
+            }
+        } catch (Exception e) {
+            throw new ServletException("Error validating password", e);
         }
 
     }
