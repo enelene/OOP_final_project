@@ -21,6 +21,7 @@ public class LoginServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         MySQLDb mySQLDb = (MySQLDb) getServletContext().getAttribute("accountManager");
         String username = request.getParameter("username");
         String password = request.getParameter("password");
@@ -32,7 +33,7 @@ public class LoginServlet extends HttpServlet {
         try {
             if (mySQLDb.validatePassword(username, password)) {
                 //request.getRequestDispatcher("/welcome.jsp").forward(request, response);
-                request.getRequestDispatcher("/home.jsp").forward(request, response);
+                request.getRequestDispatcher("/homepage/home.jsp").forward(request, response);
             } else {
                 request.getRequestDispatcher("/tryagain.jsp").forward(request, response);
             }
