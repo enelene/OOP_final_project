@@ -13,22 +13,27 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.example.quizwebsite.userManager.HashingManager.generateHash;
-
 @WebServlet({"/CreateAccountServlet"})
 public class CreateAccountServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        MySQLDb mySQLDb = (MySQLDb) getServletContext().getAttribute("accountManager");
+        userManager um = (userManager) getServletContext().getAttribute("userManager");
         String username = request.getParameter("username");
         String password = request.getParameter("password");
+        String hashedPassword;
         try {
-            password = generateHash(password);
+            hashedPassword = HashingManager.generateHash(password);
         } catch (NoSuchAlgorithmException e) {
             throw new ServletException("Error hashing password", e);
         }
+
+        // ignore cookies part yet
+        User newUser = new User(username,false, hashedPassword, "test");
         try {
-            if (mySQLDb.createAccount(username, password)) {
+            // false cause we dont have administrator configuration yet
+            // todo
+            if (um.createAccount(newUser)) {
+                request.getSession().setAttribute("user", newUser);
                 request.getRequestDispatcher("/welcome.jsp").forward(request, response);
             } else {
                 request.getRequestDispatcher("/nameInUse.jsp").forward(request, response);

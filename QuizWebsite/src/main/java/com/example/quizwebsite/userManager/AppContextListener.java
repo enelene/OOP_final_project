@@ -26,19 +26,19 @@ AppContextListener implements ServletContextListener {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setUrl("jdbc:mysql://localhost:3306/quizwebsite");
         dataSource.setUsername("root");
-        dataSource.setPassword(""); //dont forget to change
+        dataSource.setPassword("Elene2004!"); //dont forget to change
 
-        MySQLDb mySQLDb = new MySQLDb(dataSource);
-        sce.getServletContext().setAttribute("accountManager", mySQLDb);
+        userManager userManager = new userManager(dataSource);
+        sce.getServletContext().setAttribute("userManager", userManager);
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-//        BasicDataSource dataSource = (BasicDataSource) sce.getServletContext().getAttribute("dataSource");
-//        try {
-//            dataSource.close();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
+        BasicDataSource dataSource = (BasicDataSource) sce.getServletContext().getAttribute("dataSource");
+        try {
+            dataSource.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

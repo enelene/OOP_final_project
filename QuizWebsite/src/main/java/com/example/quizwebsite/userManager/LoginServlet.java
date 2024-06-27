@@ -22,7 +22,7 @@ public class LoginServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        MySQLDb mySQLDb = (MySQLDb) getServletContext().getAttribute("accountManager");
+        userManager userManager = (userManager) getServletContext().getAttribute("userManager");
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         try {
@@ -31,7 +31,9 @@ public class LoginServlet extends HttpServlet {
             throw new ServletException("Error hashing password", e);
         }
         try {
-            if (mySQLDb.validatePassword(username, password)) {
+            User user = userManager.getUser(username);
+            if (userManager.validatePassword(user,password)) {
+                request.getSession().setAttribute("user", user);
                 //request.getRequestDispatcher("/welcome.jsp").forward(request, response);
                 request.getRequestDispatcher("/homepage/home.jsp").forward(request, response);
             } else {
