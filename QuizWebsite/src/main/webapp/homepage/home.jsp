@@ -37,10 +37,10 @@
     <h1>Quiz Website</h1>
 </div>
 <div class="nav">
-    <a href="/QuizWebsite/homepage/home.jsp">Home</a>
-    <a href="/QuizWebsite/homepage/play.jsp">Play</a>
-    <a href="/QuizWebsite/homepage/create.jsp">Create</a>
-    <a href="/QuizWebsite/homepage/logout.jsp">Logout</a>
+    <a href="/QuizWebsite_war_exploded/homepage/home.jsp">Home</a>
+    <a href="/QuizWebsite_war_exploded/homepage/play.jsp">Play</a>
+    <a href="/QuizWebsite_war_exploded/homepage/create.jsp">Create</a>
+    <a href="/QuizWebsite_war_exploded/homepage/logout.jsp">Logout</a>
 </div>
 <div class="content">
     <h2>Hello, <%= request.getParameter("username") %>!</h2>

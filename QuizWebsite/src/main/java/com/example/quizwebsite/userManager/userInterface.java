@@ -1,8 +1,6 @@
 package com.example.quizwebsite.userManager;
 
-import java.util.ArrayList;
-
-public interface DB {
+public interface userInterface {
     boolean accountExists(User user);
     boolean validatePassword(User user,String password);
     //    public userManager createAccount(String username, String password, boolean is_admin) might be changed like this

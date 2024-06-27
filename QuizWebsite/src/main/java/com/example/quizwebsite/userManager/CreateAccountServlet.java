@@ -28,9 +28,10 @@ public class CreateAccountServlet extends HttpServlet {
         }
 
         // ignore cookies part yet
+        // false cause we dont have administrator configuration yet
         User newUser = new User(username,false, hashedPassword, "test");
         try {
-            // false cause we dont have administrator configuration yet
+
             // todo
             if (um.createAccount(newUser)) {
                 request.getSession().setAttribute("user", newUser);

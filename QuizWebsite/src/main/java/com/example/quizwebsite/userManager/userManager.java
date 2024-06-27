@@ -3,7 +3,7 @@ package com.example.quizwebsite.userManager;
 import org.apache.commons.dbcp2.BasicDataSource;
 import java.sql.*;
 
-public class userManager implements DB {
+public class userManager implements userInterface {
     private static BasicDataSource dataSource;
 
     public userManager(BasicDataSource dataSource) {
