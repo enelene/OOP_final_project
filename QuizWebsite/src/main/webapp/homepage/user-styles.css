@@ -1,0 +1,77 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4eeff;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+.header {
+    background-color: #424874;
+    grid-area: header;
+}
+h1 {
+    text-align: center;
+    color: #fff;
+}
+.nav {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    grid-area: nav;
+    text-align: center;
+}
+.nav a {
+    margin: auto;
+}
+img {
+    height: 40px;
+    width: 40px;
+}
+.after-header{
+    grid-area: hr1;
+    height: 2px;
+    color: #424874;
+    width: 100vw;
+}
+.grid-container {
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    grid-template-areas:
+    'header header header'
+    'nav nav nav'
+    'hr1 hr1 hr1'
+    'your-profile your-profile your-profile'
+    'a-board a-board  f-board'
+    'hr2 hr2 hr2'
+    'footer footer footer';
+    margin: 0;
+    min-width: 100vw;
+    min-height: 100vh;
+    grid-gap: 10px;
+    text-align: center;
+}
+.your-profile {
+    grid-area: your-profile;
+}
+.achievement-board {
+    grid-area: a-board;
+}
+.friends-board {
+    grid-area: f-board;
+}
+h4 img {
+    height: 50px;
+    width: 50px;
+}
+footer {
+    align-self: center;
+    grid-area: footer;
+}
+.before-footer {
+    grid-area: hr2;
+    height: 2px;
+    color: #424874;
+    width: 100vw;
+}
