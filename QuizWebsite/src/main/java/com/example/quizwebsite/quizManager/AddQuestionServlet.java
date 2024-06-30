@@ -54,7 +54,8 @@ public class AddQuestionServlet extends HttpServlet {
         if (saved) {
             response.sendRedirect("create/addQuestions.jsp?quizId=" + quizId);
         } else {
-            response.sendRedirect("error.jsp");
+            request.setAttribute("errorMessage", "Failed to save the question. Please try again.");
+            request.getRequestDispatcher("create/addQuestions.jsp?quizId=" + quizId).forward(request, response);
         }
     }
 }

@@ -57,15 +57,25 @@ public class QuizManager {
             stmt.setInt(1, question.getQuizId());
             stmt.setString(2, question.getText());
             stmt.setString(3, question.getType());
-            stmt.setString(4, String.join("|", question.getOptions()));
 
-            List<String> correctOptions = new ArrayList<>();
-            for (int i = 0; i < question.getCorrectOptions().size(); i++) {
-                if (question.getCorrectOptions().get(i)) {
-                    correctOptions.add(String.valueOf(i));
+            if ("multiple_choice".equals(question.getType())) {
+                stmt.setString(4, String.join("|", question.getOptions()));
+                List<String> correctOptions = new ArrayList<>();
+                for (int i = 0; i < question.getCorrectOptions().size(); i++) {
+                    if (question.getCorrectOptions().get(i)) {
+                        correctOptions.add(String.valueOf(i));
+                    }
                 }
+                stmt.setString(5, String.join("|", correctOptions));
+            } else if ("true_false".equals(question.getType())) {
+                stmt.setString(4, "True|False");
+                stmt.setString(5, question.getCorrectAnswer());
+            } else if ("short_answer".equals(question.getType())) {
+                stmt.setString(4, null);
+                stmt.setString(5, question.getCorrectAnswer());
+            } else {
+                throw new IllegalArgumentException("Unsupported question type: " + question.getType());
             }
-            stmt.setString(5, String.join("|", correctOptions));
 
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
