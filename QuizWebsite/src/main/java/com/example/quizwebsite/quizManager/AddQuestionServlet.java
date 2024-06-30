@@ -52,7 +52,7 @@ public class AddQuestionServlet extends HttpServlet {
         boolean saved = quizManager.saveQuestion(question);
 
         if (saved) {
-            response.sendRedirect("addQuestions.jsp?quizId=" + quizId);
+            response.sendRedirect("create/addQuestions.jsp?quizId=" + quizId);
         } else {
             response.sendRedirect("error.jsp");
         }

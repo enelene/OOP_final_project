@@ -46,7 +46,7 @@ public class SaveQuizServlet extends HttpServlet {
         if (isSaved) {
             int quizId = quizManager.getQuizIdByName(name);
             if (quizId != -1) {
-                response.sendRedirect("addQuestions.jsp?quizId=" + quizId + "&quizName=" + URLEncoder.encode(name, "UTF-8"));
+                response.sendRedirect("create/addQuestions.jsp?quizId=" + quizId + "&quizName=" + URLEncoder.encode(name, "UTF-8"));
             } else {
                 throw new ServletException("Error retrieving quiz ID after saving");
             }

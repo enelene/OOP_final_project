@@ -18,7 +18,7 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
-            <li class="nav-item"><a class="nav-link" href="homepage/home.jsp">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="../homepage/home.jsp">Home</a></li>
             <li class="nav-item"><a class="nav-link" href="#">Play</a></li>
             <li class="nav-item"><a class="nav-link" href="#">Create</a></li>
             <li class="nav-item"><a class="nav-link" href="#">Profile</a></li>
@@ -29,7 +29,7 @@
 
 <div class="container mt-5">
     <h1 class="mb-4">Add Questions to Quiz: ${param.quizName}</h1>
-    <form action="AddQuestionServlet" method="post">
+    <form action="../AddQuestionServlet" method="post">
         <input type="hidden" name="quizId" value="${param.quizId}">
 
         <div class="form-group">

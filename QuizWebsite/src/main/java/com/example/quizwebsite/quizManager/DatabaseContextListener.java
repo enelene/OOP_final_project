@@ -20,7 +20,7 @@ public class DatabaseContextListener implements ServletContextListener {
         }
         dataSource.setUrl("jdbc:mysql://localhost:3306/quizwebsite");
         dataSource.setUsername("root");
-        dataSource.setPassword("Elene2004!");
+        dataSource.setPassword("Eosoxeshrca123.");
 
         sce.getServletContext().setAttribute("dataSource", dataSource);
     }
