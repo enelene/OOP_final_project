@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URLEncoder;
 
 @WebServlet("/SaveQuizServlet")
 public class SaveQuizServlet extends HttpServlet {
@@ -43,7 +44,12 @@ public class SaveQuizServlet extends HttpServlet {
 
         boolean isSaved = quizManager.saveQuizToDatabase(quiz, user.getUsername());
         if (isSaved) {
-            response.sendRedirect("home.jsp");
+            int quizId = quizManager.getQuizIdByName(name);
+            if (quizId != -1) {
+                response.sendRedirect("addQuestions.jsp?quizId=" + quizId + "&quizName=" + URLEncoder.encode(name, "UTF-8"));
+            } else {
+                throw new ServletException("Error retrieving quiz ID after saving");
+            }
         } else {
             throw new ServletException("Error saving quiz to database");
         }

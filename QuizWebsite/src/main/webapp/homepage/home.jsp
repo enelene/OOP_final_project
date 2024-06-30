@@ -8,7 +8,6 @@
     <link rel="stylesheet" type="text/css" href="user-styles.css">
 </head>
 <body>
-<<<<<<< Updated upstream:QuizWebsite/src/main/webapp/homepage/home.jsp
     <div class="grid-container">
         <div class="grid-item header">
             <h1>Quiz Website</h1>
@@ -29,21 +28,6 @@
         <hr class="before-footer">
         <footer>@Elene&Ana&Ana</footer>
     </div>
-=======
-<div class="header">
-    <h1>Quiz Website</h1>
-</div>
-<div class="nav">
-    <a href="/home.jsp">Home</a>
-    <a href="play.jsp">Play</a>
-    <a href="createQuiz.jsp">Create</a>
-    <a href="/logout.jsp">Logout</a>
-</div>
-<div class="content">
-    <h2>Hello, <%= request.getParameter("username") %>!</h2>
-    <p>Welcome to the Quiz Website. Choose an option from the menu above to get started.</p>
-</div>
->>>>>>> Stashed changes:QuizWebsite/src/main/webapp/home.jsp
 </body>
 </html>
 
