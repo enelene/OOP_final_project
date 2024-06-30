@@ -1,3 +1,5 @@
+/*userpage*/
+
 body {
     font-family: Arial, sans-serif;
     background-color: #f4eeff;
@@ -52,7 +54,7 @@ img {
     grid-gap: 10px;
     text-align: center;
 }
-.your-profile {
+.content {
     grid-area: your-profile;
 }
 .achievement-board {

@@ -1,10 +1,10 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!--<%@ page contentType="text/html;charset=UTF-8" language="java" %>-->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page</title>
+    <title>user Profile</title>
     <link rel="stylesheet" type="text/css" href="user-styles.css">
 </head>
 <body>
@@ -21,15 +21,20 @@
         </div>
         <hr class="after-header">
         <div class="grid-item content">
-                <h2>Hello, ${user.getUsername()}!</h2>
-                <p>Welcome to the Quiz Website. Choose an option from the menu above to get started.</p>
+            <h2> ${user.getUsername()}'s Profile</h2>
         </div>
-
+        <div class="grid-item achievement-board">
+            <h3>Achievement Board</h3>
+            <h4>Total score:</h4> <!--overall score number-->
+            <h4>Quizzes taken:</h4> <!--number of quizzes taken-->
+            <h4>Quizzes created:</h4> <!--number of quizzes created-->
+        </div>
+        <div class="grid-item friends-board">
+            <h4 title="Friends"><img src="icons/friends-icon.png" alt="friends icon">3</h4> <!--friends number-->
+            <h4 title="Friend requests"><img src="icons/friend-request-icon.png" alt="friend request icon">1</h4> <!--friend request number-->
+        </div>
         <hr class="before-footer">
         <footer>@Elene&Ana&Ana</footer>
     </div>
 </body>
 </html>
-
-
-

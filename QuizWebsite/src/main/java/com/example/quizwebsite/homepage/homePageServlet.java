@@ -12,9 +12,6 @@ import java.io.IOException;
 @WebServlet("/HomepageServlet")
 public class homePageServlet extends HttpServlet {
 
-
-    private static final long serialVersionUID = 1L;
-
     public homePageServlet() {
         super();
     }
@@ -50,7 +47,7 @@ public class homePageServlet extends HttpServlet {
                     break;
                 case "profile":
                     // Handle navigation to profile page
-                    request.getRequestDispatcher("/homepage/userPage.html").forward(request, response);
+                    request.getRequestDispatcher("/homepage/userPage.jsp").forward(request, response);
                     break;
                 default:
                     // Default action if the provided action is not recognized
