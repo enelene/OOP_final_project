@@ -100,7 +100,7 @@
         <button type="submit" class="btn btn-primary">Add Question</button>
     </form>
 
-    <a href="ViewQuizServlet?id=${param.quizId}" class="btn btn-secondary mt-3">Finish Adding Questions</a>
+    <a href="../ViewQuizServlet?id=${param.quizId}" class="btn btn-secondary mt-3">Finish Adding Questions</a>
 </div>
 
 <script>

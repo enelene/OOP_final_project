@@ -1,5 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.net.URLEncoder" %>
+<%@ page import="com.example.quizwebsite.quizManager.Question" %>
+<%@ page import="com.example.quizwebsite.quizManager.Quiz" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,51 +32,77 @@
 </nav>
 
 <div class="container mt-5">
-    <h1 class="mb-4">${quiz.name}</h1>
+    <%
+        Quiz quiz = (Quiz) request.getAttribute("quiz");
+        if (quiz != null) {
+    %>
+    <h1 class="mb-4"><%= quiz.getName() %></h1>
 
     <div class="card mb-4">
         <div class="card-body">
             <h5 class="card-title">Quiz Details</h5>
-            <p class="card-text"><strong>Description:</strong> ${quiz.description}</p>
-            <p class="card-text"><strong>Category:</strong> ${quiz.category}</p>
-            <p class="card-text"><strong>Display on Single Page:</strong> ${quiz.displayOnSinglePage ? 'Yes' : 'No'}</p>
-            <p class="card-text"><strong>Display in Random Order:</strong> ${quiz.displayInRandomOrder ? 'Yes' : 'No'}</p>
-            <p class="card-text"><strong>Allow Practice Mode:</strong> ${quiz.allowPracticeMode ? 'Yes' : 'No'}</p>
-            <p class="card-text"><strong>Correct Immediately:</strong> ${quiz.correctImmediately ? 'Yes' : 'No'}</p>
+            <p class="card-text"><strong>Description:</strong> <%= quiz.getDescription() %></p>
+            <p class="card-text"><strong>Category:</strong> <%= quiz.getCategory() %></p>
+            <p class="card-text"><strong>Display on Single Page:</strong> <%= quiz.isDisplayOnSinglePage() ? "Yes" : "No" %></p>
+            <p class="card-text"><strong>Display in Random Order:</strong> <%= quiz.isDisplayInRandomOrder() ? "Yes" : "No" %></p>
+            <p class="card-text"><strong>Allow Practice Mode:</strong> <%= quiz.isAllowPracticeMode() ? "Yes" : "No" %></p>
+            <p class="card-text"><strong>Correct Immediately:</strong> <%= quiz.isCorrectImmediately() ? "Yes" : "No" %></p>
         </div>
     </div>
 
     <h2 class="mb-3">Questions</h2>
 
-    <c:forEach var="question" items="${questions}" varStatus="status">
-        <div class="card mb-3">
-            <div class="card-body">
-                <h5 class="card-title">Question ${status.index + 1}</h5>
-                <p class="card-text"><strong>Question:</strong> ${question.text}</p>
-                <p class="card-text"><strong>Type:</strong> ${question.type}</p>
+    <%
+        List<Question> questions = (List<Question>) request.getAttribute("questions");
+        if (questions != null && !questions.isEmpty()) {
+            for (int i = 0; i < questions.size(); i++) {
+                Question question = questions.get(i);
+    %>
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">Question <%= i + 1 %></h5>
+            <p class="card-text"><strong>Question:</strong> <%= question.getText() %></p>
+            <p class="card-text"><strong>Type:</strong> <%= question.getType() %></p>
 
-                <c:if test="${question.type == 'multiple_choice'}">
-                    <p class="card-text"><strong>Options:</strong></p>
-                    <ul>
-                        <c:forEach var="option" items="${question.options}" varStatus="optionStatus">
-                            <li>${option} ${question.correctOptions[optionStatus.index] ? '(Correct)' : ''}</li>
-                        </c:forEach>
-                    </ul>
-                </c:if>
-
-                <c:if test="${question.type == 'true_false'}">
-                    <p class="card-text"><strong>Correct Answer:</strong> ${question.correctAnswer}</p>
-                </c:if>
-
-                <c:if test="${question.type == 'short_answer'}">
-                    <p class="card-text"><strong>Correct Answer:</strong> ${question.correctAnswer}</p>
-                </c:if>
-            </div>
+            <% if ("multiple_choice".equals(question.getType())) { %>
+            <p class="card-text"><strong>Options:</strong></p>
+            <ul>
+                <%
+                    List<String> options = question.getOptions();
+                    List<Boolean> correctOptions = question.getCorrectOptions();
+                    if (options != null && correctOptions != null) {
+                        for (int j = 0; j < options.size(); j++) {
+                %>
+                <li><%= options.get(j) %> <%= correctOptions.get(j) ? "(Correct)" : "" %></li>
+                <%
+                        }
+                    }
+                %>
+            </ul>
+            <% } else if ("true_false".equals(question.getType()) || "short_answer".equals(question.getType())) { %>
+            <p class="card-text"><strong>Correct Answer:</strong> <%= question.getCorrectAnswer() %></p>
+            <% } %>
         </div>
-    </c:forEach>
+    </div>
+    <%
+        }
+    } else {
+    %>
+    <p>No questions available for this quiz.</p>
+    <%
+        }
+    %>
 
-    <a href="addQuestions.jsp?quizId=${quiz.id}&quizName=${quiz.name}" class="btn btn-primary">Add More Questions</a>
+    <a href="create/addQuestions.jsp?quizId=<%= quiz.getId() %>&quizName=<%= URLEncoder.encode(quiz.getName(), "UTF-8") %>" class="btn btn-primary">Add More Questions</a>
     <a href="../homepage/home.jsp" class="btn btn-secondary">Back to Home</a>
+    <%
+    } else {
+    %>
+    <p>No quiz information available.</p>
+    <a href="../homepage/home.jsp" class="btn btn-secondary">Back to Home</a>
+    <%
+        }
+    %>
 </div>
 </body>
 </html>

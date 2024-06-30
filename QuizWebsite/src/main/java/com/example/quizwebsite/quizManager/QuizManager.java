@@ -3,6 +3,7 @@ package com.example.quizwebsite.quizManager;
 import org.apache.commons.dbcp2.BasicDataSource;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class QuizManager {
@@ -84,4 +85,68 @@ public class QuizManager {
             return false;
         }
     }
+    public Quiz getQuizById(int quizId) {
+        String sql = "SELECT * FROM quizzes WHERE id = ?";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, quizId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new Quiz(
+                            rs.getString("name"),
+                            rs.getString("description"),
+                            rs.getString("category"),
+                            rs.getBoolean("display_on_single_page"),
+                            rs.getBoolean("display_in_random_order"),
+                            rs.getBoolean("allow_practice_mode"),
+                            rs.getBoolean("correct_immediately")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Question> getQuestionsByQuizId(int quizId) {
+        List<Question> questions = new ArrayList<>();
+        String sql = "SELECT * FROM questions WHERE quiz_id = ?";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, quizId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Question question = new Question();
+                    question.setId(rs.getInt("id"));
+                    question.setQuizId(rs.getInt("quiz_id"));
+                    question.setText(rs.getString("question_text"));
+                    question.setType(rs.getString("question_type"));
+
+                    if ("multiple_choice".equals(question.getType())) {
+                        String[] options = rs.getString("options").split("\\|");
+                        question.setOptions(new ArrayList<>(Arrays.asList(options)));
+
+                        String[] correctOptionsStr = rs.getString("correct_options").split("\\|");
+                        List<Boolean> correctOptions = new ArrayList<>();
+                        for (int i = 0; i < options.length; i++) {
+                            correctOptions.add(false);
+                        }
+                        for (String index : correctOptionsStr) {
+                            correctOptions.set(Integer.parseInt(index), true);
+                        }
+                        question.setCorrectOptions(correctOptions);
+                    } else {
+                        question.setCorrectAnswer(rs.getString("correct_options"));
+                    }
+
+                    questions.add(question);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return questions;
+    }
+
 }
