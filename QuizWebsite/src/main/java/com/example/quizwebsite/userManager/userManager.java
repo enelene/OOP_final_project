@@ -10,7 +10,21 @@ public class userManager implements userInterface {
         this.dataSource = dataSource;
     }
 
-
+    public int getUserIdFromDatabase(String username) {
+        String query = "SELECT id FROM users WHERE username = ?";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, username);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("id");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1; // Return -1 if user not found or an error occurs
+    }
     @Override
     public boolean accountExists(User user) {
         String sql = "SELECT COUNT(*) FROM users WHERE username = ?";

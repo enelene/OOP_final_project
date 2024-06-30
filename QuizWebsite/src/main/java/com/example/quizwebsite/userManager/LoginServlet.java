@@ -35,7 +35,7 @@ public class LoginServlet extends HttpServlet {
             if (userManager.validatePassword(user,password)) {
                 request.getSession().setAttribute("user", user);
                 //request.getRequestDispatcher("/welcome.jsp").forward(request, response);
-                request.getRequestDispatcher("/homepage/home.jsp").forward(request, response);
+                request.getRequestDispatcher("/home.jsp").forward(request, response);
             } else {
                 request.getRequestDispatcher("/tryagain.jsp").forward(request, response);
             }
@@ -44,4 +44,5 @@ public class LoginServlet extends HttpServlet {
         }
 
     }
+
 }
