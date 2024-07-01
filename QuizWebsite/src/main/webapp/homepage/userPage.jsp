@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>user Profile</title>
-    <link rel="stylesheet" type="text/css" href="user-styles.css">
+    <link rel="stylesheet" type="text/css" href="userStyles.css">
 </head>
 <body>
     <div class="grid-container">

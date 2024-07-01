@@ -5,7 +5,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Page</title>
-    <link rel="stylesheet" type="text/css" href="user-styles.css">
+    <link rel="stylesheet" type="text/css" href="userStyles.css">
+    <style>
+        .grid-container { !important;
+            width: 100vw;
+            height: 100vh;
+            display: grid;
+            grid-template-areas:
+            'header header header'
+            'nav nav nav'
+            'hr1 hr1 hr1'
+            'your-profile your-profile your-profile'
+            'a-board a-board  a-board'
+            'hr2 hr2 hr2'
+            'footer footer footer';
+            margin: 0;
+            min-width: 100vw;
+            min-height: 100vh;
+            grid-gap: 10px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
     <div class="grid-container">

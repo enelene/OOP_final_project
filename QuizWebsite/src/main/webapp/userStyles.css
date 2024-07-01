@@ -11,6 +11,8 @@ body {
 .header {
     background-color: #424874;
     grid-area: header;
+    padding: 0;
+    margin: auto;
 }
 h1 {
     text-align: center;
@@ -54,6 +56,7 @@ img {
     grid-gap: 10px;
     text-align: center;
 }
+
 .content {
     grid-area: your-profile;
 }

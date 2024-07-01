@@ -19,7 +19,7 @@ public class homePageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Get the action parameter from the request
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
+//        User user = (User) session.getAttribute("user");
         String action = request.getParameter("action");
 
         // Check which action to perform
