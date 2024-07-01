@@ -18,7 +18,7 @@ import static com.example.quizwebsite.userManager.HashingManager.generateHash;
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        userManager userManager = (userManager) getServletContext().getAttribute("userManager");
+        UserManager userManager = (UserManager) getServletContext().getAttribute("userManager");
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
@@ -31,9 +31,9 @@ public class LoginServlet extends HttpServlet {
 
         try {
             String hashedPassword = HashingManager.generateHash(password);
-            User user = userManager.getUser(username);
+            User user = userManager.getUserByUsername(username);
 
-            if (user != null && userManager.validatePassword(user, hashedPassword)) {
+            if (user != null && userManager.validateUser(username, hashedPassword)) {
                 request.getSession().setAttribute("user", user);
                 request.getRequestDispatcher("/homepage/home.jsp").forward(request, response);
             } else {

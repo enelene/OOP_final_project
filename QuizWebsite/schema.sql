@@ -1,6 +1,6 @@
 USE quizwebsite;
 
-CREATE TABLE IF NOT EXISTS 'users' (
+CREATE TABLE IF NOT EXISTS `users` (
                        id INT AUTO_INCREMENT PRIMARY KEY,
                        username VARCHAR(255) NOT NULL UNIQUE,
                        password VARCHAR(255) NOT NULL,
@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS 'users' (
                        UNIQUE KEY `cookie_key` (`cookie_key`)
 );
 
-CREATE TABLE quizzes (
+CREATE TABLE IF NOT EXISTS quizzes (
                          id INT PRIMARY KEY AUTO_INCREMENT,
                          name VARCHAR(255) NOT NULL,
                          description TEXT,
@@ -21,7 +21,7 @@ CREATE TABLE quizzes (
                          username VARCHAR(100)
 );
 
-CREATE TABLE questions (
+CREATE TABLE IF NOT EXISTS questions (
                            id INT PRIMARY KEY AUTO_INCREMENT,
                            quiz_id INT,
                            question_text TEXT,
@@ -29,4 +29,12 @@ CREATE TABLE questions (
                            options TEXT,
                            correct_options TEXT,
                            FOREIGN KEY (quiz_id) REFERENCES quizzes(id)
+);
+
+
+CREATE TABLE IF NOT EXISTS `relations` (
+                                           relation INT AUTO_INCREMENT PRIMARY KEY,
+                                           id_1 INT NOT NULL,
+                                           id_2 INT NOT NULL,
+                                           status VARCHAR(15) NOT NULL
 );
