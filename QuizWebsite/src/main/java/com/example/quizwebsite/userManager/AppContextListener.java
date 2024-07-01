@@ -26,10 +26,13 @@ AppContextListener implements ServletContextListener {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setUrl("jdbc:mysql://localhost:3306/quizwebsite");
         dataSource.setUsername("root");
-        dataSource.setPassword("Elene2004!"); //dont forget to change
+        dataSource.setPassword("12345"); //dont forget to change
 
-        userManager userManager = new userManager(dataSource);
+
+        UserManager userManager = new UserManager(dataSource);
         sce.getServletContext().setAttribute("userManager", userManager);
+        RelationManager relationManager = new RelationManager(dataSource);
+        sce.getServletContext().setAttribute("relationManager", relationManager);
     }
 
     @Override
