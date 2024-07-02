@@ -95,12 +95,12 @@
     %>
 
     <a href="create/addQuestions.jsp?quizId=<%= quiz.getId() %>&quizName=<%= URLEncoder.encode(quiz.getName(), "UTF-8") %>" class="btn btn-primary">Add More Questions</a>
-    <a href="../homepage/home.jsp" class="btn btn-secondary">Back to Home</a>
+    <a href="HomepageServlet?action=home" class="btn btn-secondary">Back to Home</a>
     <%
     } else {
     %>
     <p>No quiz information available.</p>
-    <a href="../homepage/home.jsp" class="btn btn-secondary">Back to Home</a>
+    <a href="HomepageServlet?action=home" class="btn btn-secondary">Back to Home</a>
     <%
         }
     %>
