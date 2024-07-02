@@ -1,28 +1,36 @@
-package com.example.quizwebsite.quizManager;
+package com.example.quizwebsite.listeners;
 
 import org.apache.commons.dbcp2.BasicDataSource;
+import com.example.quizwebsite.userManager.UserManager;
+import com.example.quizwebsite.userManager.RelationManager;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 import java.sql.SQLException;
 
-
 @WebListener
 public class DatabaseContextListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        BasicDataSource dataSource = new BasicDataSource();
         try {
             Class.forName("com.mysql.cj.jdbc.Driver"); // Load MySQL driver class
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Failed to load JDBC driver for MySQL", e);
         }
+
+        BasicDataSource dataSource = new BasicDataSource();
         dataSource.setUrl("jdbc:mysql://localhost:3306/quizwebsite");
         dataSource.setUsername("root");
-        dataSource.setPassword("Elene2004!");
+        dataSource.setPassword("Eosoxeshrca123."); // Remember to change this
 
         sce.getServletContext().setAttribute("dataSource", dataSource);
+
+        UserManager userManager = new UserManager(dataSource);
+        sce.getServletContext().setAttribute("userManager", userManager);
+
+        RelationManager relationManager = new RelationManager(dataSource);
+        sce.getServletContext().setAttribute("relationManager", relationManager);
     }
 
     @Override
