@@ -14,8 +14,8 @@
         </div>
         <div class="grid-item nav">
             <a href="HomepageServlet?action=home" title="Home"><img src="icons/home-icon.png" alt="homepage icon"></a>
-            <a href="HomepageServlet?action=createQuiz" title="Play a quiz"><img src="icons/play-icon.png" alt="play quiz icon"></a>
-            <a href="HomepageServlet?action=takeQuiz" title="Create a quiz"><img src="icons/create-icon.png" alt="create a quiz icon"></a>
+            <a href="HomepageServlet?action=takeQuiz" title="Play a quiz"><img src="icons/play-icon.png" alt="play quiz icon"></a>
+            <a href="HomepageServlet?action=createQuiz" title="Create a quiz"><img src="icons/create-icon.png" alt="create a quiz icon"></a>
             <a href="HomepageServlet?action=profile" title="Your Profile"><img src="icons/profile-icon.png" alt="profile page icon"></a>                                          <!--you need to add correct link-->
             <a href="HomepageServlet?action=logout" title="Logout"><img src="icons/logout.png" alt="logout icon"></a>
         </div>

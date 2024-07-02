@@ -13,20 +13,21 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="quizCreationStyles.css">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark">
     <a class="navbar-brand" href="#">Quiz Website</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
-            <li class="nav-item"><a class="nav-link" href="../homepage/home.jsp">Home</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Play</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Create</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Profile</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Logout</a></li>
+            <li class="nav-item"><a class="nav-link" href="HomepageServlet?action=home" title="Home"><img src="icons/home-icon.png" alt="homepage icon"></a></li>
+            <li class="nav-item"><a class="nav-link" href="HomepageServlet?action=takeQuiz" title="Play a quiz"><img src="icons/play-icon.png" alt="play quiz icon"></a></li>
+            <li class="nav-item"><a class="nav-link" href="HomepageServlet?action=createQuiz" title="Create a quiz"><img src="icons/create-icon.png" alt="create a quiz icon"></a></li>
+            <li class="nav-item"><a class="nav-link" href="HomepageServlet?action=profile" title="Your Profile"><img src="icons/profile-icon.png" alt="profile page icon"></a> </li>
+            <li class="nav-item"><a class="nav-link" href="HomepageServlet?action=logout" title="Logout"><img src="icons/logout.png" alt="logout icon"></a></li>
         </ul>
     </div>
 </nav>

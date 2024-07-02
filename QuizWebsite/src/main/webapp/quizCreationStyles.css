@@ -1,0 +1,16 @@
+.navbar-dark {
+    background-color: #424874; !important
+    max-height: 80px;!important
+    font-family: sans-serif; !important
+}
+
+body {
+    background-color: #f4eeff; !important
+}
+
+img {
+    height: 50px; !important
+    width:  50px; !important
+}
+
+/*this is for modifying bootstrap css of quiz creation*/

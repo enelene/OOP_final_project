@@ -1,7 +1,7 @@
 /*userpage*/
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: sans-serif;
     background-color: #f4eeff;
     margin: 0;
     padding: 0;
@@ -11,12 +11,14 @@ body {
 .header {
     background-color: #424874;
     grid-area: header;
-    padding: 0;
-    margin: auto;
+    font-family: "Roboto Light"; !important
+    font-weight: lighter;
+    align-items: center;
 }
 h1 {
     text-align: center;
     color: #fff;
+    font-size: 19px;  /*changed*/
 }
 .nav {
     display: flex;
@@ -24,13 +26,14 @@ h1 {
     flex-wrap: wrap;
     grid-area: nav;
     text-align: center;
+    gap: 17px;
 }
 .nav a {
     margin: auto;
 }
 img {
-    height: 40px;
-    width: 40px;
+    height: 50px;
+    width:  50px;
 }
 .after-header{
     grid-area: hr1;

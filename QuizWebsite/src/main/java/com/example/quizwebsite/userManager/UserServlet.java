@@ -54,12 +54,13 @@ public class UserServlet extends HttpServlet {
         newUser = um.addUser(newUser, hashedPassword);
         if (newUser != null) {
             request.getSession().setAttribute("user", newUser);
-            request.getRequestDispatcher("/welcome.jsp").forward(request, response);
+            request.getRequestDispatcher("/homepage/home.jsp").forward(request, response);
         }
         request.getRequestDispatcher("/nameInUse.jsp").forward(request, response);
     }
 
     //Endpoint for deleting an account.
+    // not needed until we add administrator privileges
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //todo check if you are logged in as the user you are trying to delete.
         UserManager um = (UserManager) getServletContext().getAttribute("userManager");
@@ -71,7 +72,7 @@ public class UserServlet extends HttpServlet {
             return;
         }
         um.deleteUser(id);
-        response.sendRedirect(request.getContextPath() + "/userDeleted.jsp?id=" + id);
+        response.sendRedirect(request.getContextPath() + "/homepage/userDeleted.jsp?id=" + id);
     }
 
 }

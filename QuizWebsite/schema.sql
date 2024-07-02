@@ -81,4 +81,4 @@ CREATE TABLE IF NOT EXISTS `relations` (
                                            id_2 INT NOT NULL,
                                            status VARCHAR(15) NOT NULL
 );
->>>>>>> 0dd5627578ea535a17b9d72f2a59ea26ed82965d
+
