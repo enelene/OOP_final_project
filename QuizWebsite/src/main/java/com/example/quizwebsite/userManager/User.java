@@ -3,20 +3,20 @@ package com.example.quizwebsite.userManager;
 public class User {
     private Integer id;
     private String username;
+    private String password;
     private boolean isAdmin;
     private String cookieKey;
 
-    public User(Integer id, String username, boolean isAdmin, String cookieKey) {
+    public User(Integer id, String username, String password, boolean isAdmin, String cookieKey) {
         this.id = id;
         this.username = username;
+        this.password = password;
         this.isAdmin = isAdmin;
         this.cookieKey = cookieKey;
     }
-
-    public User(String username) {
-        this(null, username, false, null);
+    public User(String username,String password) {
+        this(null, username, password, false, null);
     }
-
     public String getUsername() {
         return username;
     }
@@ -35,10 +35,9 @@ public class User {
     public void setId(Integer id) {
         this.id = id;
     }
-    public String getCookieKey() {
-        return cookieKey;
-    }
-    public void setCookieKey(String cookieKey) {
-        this.cookieKey = cookieKey;
-    }
+    public String getCookieKey() {return cookieKey;}
+    public void setCookieKey(String key) { this.cookieKey = key;}
+    public void setPassword(String password) { this.password = password;}
+    //todo solve relation problem
+    public void setCookieKey() {this.cookieKey = "";}
 }

@@ -32,7 +32,7 @@ h1 {
 }
 
 /* Input fields */
-input[type="text"], input[type="password"] {
+input[type="text"], input[type="password"]{
     width: calc(100% - 20px);
     padding: 10px;
     margin-bottom: 20px;

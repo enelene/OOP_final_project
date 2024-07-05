@@ -20,6 +20,7 @@
     <form action="LoginServlet" method="post">
         <input type="text" name="username" placeholder="Username"><br>
         <input type="password" name="password" placeholder="Password"><br>
+        <input type="checkbox" name="rememberMe"> Remember Me
         <input type="submit" value="Login">
     </form>
     <a href="createAccount.jsp">Create a new account</a>

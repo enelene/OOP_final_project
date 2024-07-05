@@ -2,6 +2,8 @@ package com.example.quizwebsite.userManager;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -77,9 +79,11 @@ public class UserManager implements UserInterface {
             stmt.setString(1, username);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                User user = new User(rs.getString("username"));
+                User user = new User(rs.getString("username"), rs.getString("password"));
                 user.setId(rs.getInt("id"));
-                user.setCookieKey(rs.getString("cookie_key"));
+                //todo
+                user.setCookieKey();
+                //user.setCookieKey(rs.getString("cookie_key"));
                 if(rs.getInt("is_admin") == 1) { user.makeAdmin();}
                 return user;
             }
@@ -103,9 +107,11 @@ public class UserManager implements UserInterface {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                User user = new User(rs.getString("username"));
+                User user = new User(rs.getString("username"),rs.getString("password"));
                 user.setId(rs.getInt("id"));
-                user.setCookieKey(rs.getString("cookie_key"));
+                //todo
+                user.setCookieKey();
+                //user.setCookieKey(rs.getString("cookie_key"));
                 if(rs.getInt("is_admin") == 1) { user.makeAdmin();}
                 return user;
             }
@@ -114,8 +120,6 @@ public class UserManager implements UserInterface {
         }
         return null;
     }
-
-
     @Override
     public boolean userExists(String username) {
         String sql = "SELECT COUNT(*) FROM users WHERE username = ?";
@@ -133,8 +137,6 @@ public class UserManager implements UserInterface {
         }
         return false;
     }
-
-
     @Override
     public boolean validateUser(String username, String password) {
         String sql = "SELECT password FROM users WHERE username = ?";
@@ -151,6 +153,11 @@ public class UserManager implements UserInterface {
             throw new RuntimeException(e);
         }
         return false;
+    }
+
+    @Override
+    public boolean isValidInput(String username, String password) {
+        return username != null && !username.isEmpty() && password != null && !password.isEmpty();
     }
 
     /**
@@ -173,4 +180,38 @@ public class UserManager implements UserInterface {
         return rowCount > 0;
     }
 
+    public String setCookieKey(int id) {
+        String key = new BigInteger(140, new SecureRandom()).toString();
+        String sql = "UPDATE `user` SET `cookie_key` = ? WHERE `user_id` = ?";
+        try {
+            Connection conn = dataSource.getConnection();
+            PreparedStatement p = conn.prepareStatement(sql);
+            p.setString(1, key);
+            p.setInt(2, id);
+            p.executeUpdate();
+        } catch(SQLException ignored) {
+            return null;
+        }
+        return key;
+    }
+    //todo use that
+    public static User getUserByCookieKey(String key) {
+        ResultSet r;
+        String sql = "SELECT * FROM `user` WHERE `cookie_key` = ?";
+        try {
+            Connection conn = dataSource.getConnection();
+            PreparedStatement p = conn.prepareStatement(sql);
+            p.setString(1, key);
+            r = p.executeQuery();
+
+            if(!r.next()) return null;
+            User u = new User(r.getInt("id"), r.getString("username"),
+                    r.getString("password"),
+                    r.getInt("is_admin") == 1 ? true : false,
+                    r.getString("cookie_key"));
+            return u;
+        } catch (SQLException e) {
+            return null;
+        }
+    }
 }

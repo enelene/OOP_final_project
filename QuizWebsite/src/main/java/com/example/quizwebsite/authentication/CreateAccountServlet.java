@@ -3,7 +3,11 @@
 // (powered by FernFlower decompiler)
 //
 
-package com.example.quizwebsite.userManager;
+package com.example.quizwebsite.authentication;
+
+import com.example.quizwebsite.userManager.HashingManager;
+import com.example.quizwebsite.userManager.User;
+import com.example.quizwebsite.userManager.UserManager;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,8 +19,10 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
 @WebServlet({"/users"})
-public class UserServlet extends HttpServlet {
+public class CreateAccountServlet extends HttpServlet {
 
+
+    //todo - no usage for now, cause we use login servlet for that
     // Endpoint for viewing user's page
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         UserManager um = (UserManager) getServletContext().getAttribute("userManager");
@@ -39,24 +45,28 @@ public class UserServlet extends HttpServlet {
         UserManager um = (UserManager) getServletContext().getAttribute("userManager");
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        String hashedPassword;
         try {
-            hashedPassword = HashingManager.generateHash(password);
+            password = HashingManager.generateHash(password);
         } catch (NoSuchAlgorithmException e) {
             throw new ServletException("Error hashing password", e);
         }
-
-        // ignore cookies part yet
-        // false cause we dont have administrator configuration yet
-        //todo this is a temporary fix for unique cookies
-        Random r = new Random();
-        User newUser = new User(null, username,false, "test" + r.nextInt());
-        newUser = um.addUser(newUser, hashedPassword);
-        if (newUser != null) {
-            request.getSession().setAttribute("user", newUser);
-            request.getRequestDispatcher("/homepage/home.jsp").forward(request, response);
+        //prohibited actions
+        if(!um.isValidInput(username,password)) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
         }
-        request.getRequestDispatcher("/nameInUse.jsp").forward(request, response);
+
+        Random r = new Random();
+        // here we don't get user permission to set cookie key , it will be only available on login page
+        User newUser = new User(null, username,password,false, null);
+        newUser = um.addUser(newUser, password);
+        if (newUser != null) {
+            //request.getSession().setAttribute("user", newUser);
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
+        }
+        //todo - I guess both work as same, will research which one is better practice
+        //request.getRequestDispatcher("/nameInUse.jsp").forward(request, response);
+        response.sendRedirect("/nameInUse.jsp");
     }
 
     //Endpoint for deleting an account.

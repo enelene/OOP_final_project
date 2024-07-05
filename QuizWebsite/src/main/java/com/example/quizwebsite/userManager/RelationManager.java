@@ -137,11 +137,13 @@ public class RelationManager implements RelationInterface{
             stmt.setInt(2, user_id);
             ResultSet rs = stmt.executeQuery();
             while(rs.next()){
-                User nextUser = new User(rs.getString(2));
+                User nextUser = new User(rs.getString(2),rs.getString(3));
                 if(rs.getInt(3) > 0){
                     nextUser.makeAdmin();
                 }
-                nextUser.setCookieKey(rs.getString(4));
+                //todo
+                nextUser.setCookieKey();
+                //nextUser.setCookieKey(rs.getString(4));
                 nextUser.setId(rs.getInt(1));
                 friends.add(nextUser);
             }
@@ -166,11 +168,13 @@ public class RelationManager implements RelationInterface{
             stmt.setInt(1, to_id);
             ResultSet rs = stmt.executeQuery();
             while(rs.next()){
-                User nextUser = new User(rs.getString(2));
+                User nextUser = new User(rs.getString(2),rs.getString(3));
                 if(rs.getInt(3) > 0){
                     nextUser.makeAdmin();
                 }
-                nextUser.setCookieKey(rs.getString(4));
+                //todo
+                nextUser.setCookieKey();
+                //nextUser.setCookieKey(rs.getString(4));
                 nextUser.setId(rs.getInt(1));
                 requests.add(nextUser);
             }
