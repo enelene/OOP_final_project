@@ -22,7 +22,7 @@ public class UserManager {
      * Returns user object with id filled in.
      * Returns null if username was already in use.
      * @param user
-     * @return
+     * @return User
      */
 
     public static User addUser(User user) {
@@ -48,7 +48,7 @@ public class UserManager {
      * deletes user given the id.
      * returns true if user existed before the change.
      * @param id
-     * @return
+     * @return boolean
      */
     public static boolean deleteUser(int id) {
         //todo delete from friends
@@ -68,7 +68,7 @@ public class UserManager {
      * Returns user with given username from database.
      * Returns null if no user found.
      * @param username
-     * @return
+     * @return User
      */
     public static User getUserByUsername(String username) {
         try {
@@ -93,7 +93,7 @@ public class UserManager {
      * Returns user with given id from database.
      * Returns null if no user found.
      * @param id
-     * @return
+     * @return User
      */
     public User getUserById(int id) {
         try {
@@ -115,6 +115,12 @@ public class UserManager {
         }
         return null;
     }
+
+    /**
+     * checks if user exists in database.
+     * @param username
+     * @return boolean
+     */
     public static boolean userExists(String username) {
         String sql = "SELECT COUNT(*) FROM users WHERE username = ?";
         try {
@@ -131,6 +137,13 @@ public class UserManager {
         }
         return false;
     }
+
+    /**
+     * checks if user exists in database.
+     * @param username
+     * @param password
+     * @return boolean
+     */
     public boolean validateUser(String username, String password) {
         String sql = "SELECT password FROM users WHERE username = ?";
         try  {
@@ -148,6 +161,14 @@ public class UserManager {
         return false;
     }
 
+    /**
+     * checks that user is not trying to
+     * create account with empty credentials
+     * @param username
+     * @param password
+     * @return boolean
+     */
+
     public boolean isValidInput(String username, String password) {
         return username != "" && username != null && password != null && password != "";
     }
@@ -156,7 +177,7 @@ public class UserManager {
      * makes user with given id an admin.
      * returns true if user exists.
      * @param id
-     * @return
+     * @return boolean
      */
     public boolean makeUserAdmin(int id) {
         int rowCount = 0;
@@ -174,7 +195,7 @@ public class UserManager {
     /**
      * generates string with given id for cookie usage .
      * @param id
-     * @return
+     * @return String
      */
 
     public String setCookieKey(int id) {
@@ -196,7 +217,7 @@ public class UserManager {
     /**
      * finds user with given cookie key for next usage .
      * @param key
-     * @return
+     * @return User
      */
     public static User getUserByCookieKey(String key) {
         ResultSet r;

@@ -3,12 +3,8 @@
 <head>
     <title>Create a New Quiz</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="quizCreationStyles.css">
 </head>
-<body>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark">
     <a class="navbar-brand" href="#">Quiz Website</a>
@@ -59,7 +55,5 @@
         <button type="submit" class="btn btn-danger">Add Questions</button>
     </form>
 </div>
-</body>
-
 </body>
 </html>
