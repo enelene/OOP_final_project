@@ -3,6 +3,58 @@
 <%@ page import="java.net.URLEncoder" %>
 <%@ page import="com.example.quizwebsite.quizManager.Question" %>
 <%@ page import="com.example.quizwebsite.quizManager.Quiz" %>
+<%@ page import="java.nio.charset.StandardCharsets" %>
+<%!
+    private String displayQuizDetails(Quiz quiz) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<p><strong>Description:</strong> ").append(quiz.getDescription()).append("</p>");
+        sb.append("<p><strong>Category:</strong> ").append(quiz.getCategory()).append("</p>");
+        sb.append("<p><strong>Display on Single Page:</strong> ").append(quiz.isDisplayOnSinglePage() ? "Yes" : "No").append("</p>");
+        sb.append("<p><strong>Display in Random Order:</strong> ").append(quiz.isDisplayInRandomOrder() ? "Yes" : "No").append("</p>");
+        sb.append("<p><strong>Allow Practice Mode:</strong> ").append(quiz.isAllowPracticeMode() ? "Yes" : "No").append("</p>");
+        sb.append("<p><strong>Correct Immediately:</strong> ").append(quiz.isCorrectImmediately() ? "Yes" : "No").append("</p>");
+        return sb.toString();
+    }
+
+    private String displayQuestion(Question question, int index) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<div class='card mb-3'>");
+        sb.append("<div class='card-body'>");
+        sb.append("<h5 class='card-title'>Question ").append(index + 1).append("</h5>");
+        sb.append("<p class='card-text'><strong>Question:</strong> ").append(question.getText()).append("</p>");
+        sb.append("<p class='card-text'><strong>Type:</strong> ").append(question.getType()).append("</p>");
+
+        String questionType = question.getType().toString();
+        if ("MULTIPLE_CHOICE".equals(questionType)) {
+            sb.append("<p class='card-text'><strong>Options:</strong></p><ul>");
+            List<String> options = question.getOptions();
+            List<Boolean> correctOptions = question.getCorrectOptions();
+            if (options != null && correctOptions != null) {
+                for (int j = 0; j < options.size(); j++) {
+                    sb.append("<li>").append(options.get(j));
+                    if (correctOptions.get(j)) {
+                        sb.append(" <span class='badge badge-success'>Correct</span>");
+                    }
+                    sb.append("</li>");
+                }
+            }
+            sb.append("</ul>");
+        } else if ("TRUE_FALSE".equals(questionType)) {
+            String correctAnswer = question.getCorrectAnswer();
+            sb.append("<p class='card-text'><strong>Correct Answer:</strong> ")
+                    .append(correctAnswer != null ? correctAnswer : "Not set")
+                    .append("</p>");
+        } else if ("SINGLE_ANSWER".equals(questionType)) {
+            String correctAnswer = question.getCorrectAnswer();
+            sb.append("<p class='card-text'><strong>Correct Answer:</strong> ")
+                    .append(correctAnswer != null ? correctAnswer : "Not set")
+                    .append("</p>");
+        }
+
+        sb.append("</div></div>");
+        return sb.toString();
+    }
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,7 +65,12 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="quizCreationStyles.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/quizCreationStyles.css">
+    <style>
+        .badge-success {
+            background-color: #28a745;
+        }
+    </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark">
@@ -42,12 +99,7 @@
     <div class="card mb-4">
         <div class="card-body">
             <h5 class="card-title">Quiz Details</h5>
-            <p class="card-text"><strong>Description:</strong> <%= quiz.getDescription() %></p>
-            <p class="card-text"><strong>Category:</strong> <%= quiz.getCategory() %></p>
-            <p class="card-text"><strong>Display on Single Page:</strong> <%= quiz.isDisplayOnSinglePage() ? "Yes" : "No" %></p>
-            <p class="card-text"><strong>Display in Random Order:</strong> <%= quiz.isDisplayInRandomOrder() ? "Yes" : "No" %></p>
-            <p class="card-text"><strong>Allow Practice Mode:</strong> <%= quiz.isAllowPracticeMode() ? "Yes" : "No" %></p>
-            <p class="card-text"><strong>Correct Immediately:</strong> <%= quiz.isCorrectImmediately() ? "Yes" : "No" %></p>
+            <%= displayQuizDetails(quiz) %>
         </div>
     </div>
 
@@ -57,50 +109,30 @@
         List<Question> questions = (List<Question>) request.getAttribute("questions");
         if (questions != null && !questions.isEmpty()) {
             for (int i = 0; i < questions.size(); i++) {
-                Question question = questions.get(i);
     %>
-    <div class="card mb-3">
-        <div class="card-body">
-            <h5 class="card-title">Question <%= i + 1 %></h5>
-            <p class="card-text"><strong>Question:</strong> <%= question.getText() %></p>
-            <p class="card-text"><strong>Type:</strong> <%= question.getType() %></p>
-
-            <% if ("multiple_choice".equals(question.getType())) { %>
-            <p class="card-text"><strong>Options:</strong></p>
-            <ul>
-                <%
-                    List<String> options = question.getOptions();
-                    List<Boolean> correctOptions = question.getCorrectOptions();
-                    if (options != null && correctOptions != null) {
-                        for (int j = 0; j < options.size(); j++) {
-                %>
-                <li><%= options.get(j) %> <%= correctOptions.get(j) ? "(Correct)" : "" %></li>
-                <%
-                        }
-                    }
-                %>
-            </ul>
-            <% } else if ("true_false".equals(question.getType()) || "short_answer".equals(question.getType())) { %>
-            <p class="card-text"><strong>Correct Answer:</strong> <%= question.getCorrectAnswer() %></p>
-            <% } %>
-        </div>
+    <%= displayQuestion(questions.get(i), i) %>
+    <%
+        }
+    } else {
+    %>
+    <div class="alert alert-info" role="alert">
+        No questions available for this quiz.
     </div>
     <%
         }
-    } else {
-    %>
-    <p>No questions available for this quiz.</p>
-    <%
-        }
     %>
 
-    <a href="create/addQuestions.jsp?quizId=<%= quiz.getId() %>&quizName=<%= URLEncoder.encode(quiz.getName(), "UTF-8") %>" class="btn btn-primary">Add More Questions</a>
-    <a href="HomepageServlet?action=home" class="btn btn-secondary">Back to Home</a>
+    <div class="mt-4">
+        <a href="${pageContext.request.contextPath}/create/addQuestions.jsp?quizId=<%= quiz.getId() %>&quizName=<%= URLEncoder.encode(quiz.getName(), StandardCharsets.UTF_8.toString()) %>" class="btn btn-primary">Add More Questions</a>
+        <a href="${pageContext.request.contextPath}/HomepageServlet?action=home" class="btn btn-secondary">Back to Home</a>
+    </div>
     <%
     } else {
     %>
-    <p>No quiz information available.</p>
-    <a href="HomepageServlet?action=home" class="btn btn-secondary">Back to Home</a>
+    <div class="alert alert-warning" role="alert">
+        No quiz information available.
+    </div>
+    <a href="${pageContext.request.contextPath}/HomepageServlet?action=home" class="btn btn-secondary">Back to Home</a>
     <%
         }
     %>

@@ -6,57 +6,127 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 @WebServlet("/AddQuestionServlet")
 public class AddQuestionServlet extends HttpServlet {
     private QuizManager quizManager;
+    private static final Logger LOGGER = Logger.getLogger(AddQuestionServlet.class.getName());
 
     @Override
     public void init() throws ServletException {
         BasicDataSource dataSource = (BasicDataSource) getServletContext().getAttribute("dataSource");
+        if (dataSource == null) {
+            throw new ServletException("DataSource is not initialized in the ServletContext");
+        }
         this.quizManager = new QuizManager(dataSource);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int quizId = Integer.parseInt(request.getParameter("quizId"));
-        String questionText = request.getParameter("questionText");
-        String questionType = request.getParameter("questionType");
+        String quizId = request.getParameter("quizId");
+        String quizName = request.getParameter("quizName");
 
-        Question question = new Question();
-        question.setQuizId(quizId);
-        question.setText(questionText);
-        question.setType(questionType);
+        try {
+            int quizIdInt = Integer.parseInt(quizId);
+            String questionText = getRequiredParameter(request, "questionText");
+            QuestionType questionType = QuestionType.valueOf(getRequiredParameter(request, "questionType"));
 
-        if ("multiple_choice".equals(questionType)) {
-            List<String> options = new ArrayList<>();
-            List<Boolean> correctOptions = new ArrayList<>();
-            for (int i = 1; i <= 4; i++) {
-                String option = request.getParameter("option" + i);
-                if (option != null && !option.trim().isEmpty()) {
-                    options.add(option);
-                    correctOptions.add(request.getParameterValues("correctOptions") != null &&
-                            java.util.Arrays.asList(request.getParameterValues("correctOptions")).contains(String.valueOf(i-1)));
-                }
+            Question question = new Question(quizIdInt, questionText, questionType);
+
+            switch (questionType) {
+                case MULTIPLE_CHOICE:
+                    handleMultipleChoiceQuestion(request, question);
+                    break;
+                case TRUE_FALSE:
+                    handleTrueFalseQuestion(request, question);
+                    break;
+                case SINGLE_ANSWER:
+                    handleSingleAnswerQuestion(request, question);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unsupported question type: " + questionType);
             }
-            question.setOptions(options);
-            question.setCorrectOptions(correctOptions);
-        } else if ("true_false".equals(questionType)) {
-            question.setCorrectAnswer(request.getParameter("correctAnswer"));
-        } else if ("short_answer".equals(questionType)) {
-            question.setCorrectAnswer(request.getParameter("correctAnswer"));
+
+            LOGGER.info("Saving question: " + question.toString());
+            boolean saved = quizManager.saveQuestion(question);
+
+            if (saved) {
+                response.sendRedirect(request.getContextPath() + "/create/addQuestions.jsp?quizId=" + quizId + "&quizName=" + URLEncoder.encode(quizName, StandardCharsets.UTF_8.toString()));
+            } else {
+                throw new ServletException("Failed to save the question");
+            }
+        } catch (IllegalArgumentException e) {
+            LOGGER.log(Level.WARNING, "Invalid input", e);
+            handleError(request, response, "Invalid input: " + e.getMessage());
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Database error", e);
+            handleError(request, response, "Database error: " + e.getMessage());
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Unexpected error", e);
+            handleError(request, response, "Unexpected error: " + e.getMessage());
+        }
+    }
+
+    private void handleMultipleChoiceQuestion(HttpServletRequest request, Question question) {
+        String[] correctOptions = request.getParameterValues("correctOptions");
+        List<String> correctAnswers = new ArrayList<>();
+        int optionCount = 1;
+
+        while (true) {
+            String option = request.getParameter("option" + optionCount);
+            if (option == null || option.trim().isEmpty()) {
+                break;
+            }
+            boolean isCorrect = correctOptions != null &&
+                    java.util.Arrays.asList(correctOptions).contains(String.valueOf(optionCount - 1));
+            question.addOption(option.trim(), isCorrect);
+            if (isCorrect) {
+                correctAnswers.add(option.trim());
+            }
+            optionCount++;
         }
 
-        boolean saved = quizManager.saveQuestion(question);
-
-        if (saved) {
-            response.sendRedirect("create/addQuestions.jsp?quizId=" + quizId);
-        } else {
-            request.setAttribute("errorMessage", "Failed to save the question. Please try again.");
-            request.getRequestDispatcher("create/addQuestions.jsp?quizId=" + quizId).forward(request, response);
+        if (optionCount < 3) {
+            throw new IllegalArgumentException("Multiple choice questions must have at least 2 options");
         }
+
+        String correctAnswerString = String.join(", ", correctAnswers);
+        question.setCorrectAnswer(correctAnswerString);
+        LOGGER.info("Setting Multiple Choice correct answer(s): " + correctAnswerString);
+    }
+
+    private void handleTrueFalseQuestion(HttpServletRequest request, Question question) {
+        String correctAnswer = getRequiredParameter(request, "correctAnswer");
+        question.setCorrectAnswer(correctAnswer);
+        LOGGER.info("Setting True/False correct answer: " + correctAnswer);
+        question.addOption("True", "true".equals(correctAnswer));
+        question.addOption("False", "false".equals(correctAnswer));
+    }
+
+    private void handleSingleAnswerQuestion(HttpServletRequest request, Question question) {
+        String correctAnswer = getRequiredParameter(request, "correctAnswer");
+        question.setCorrectAnswer(correctAnswer);
+        LOGGER.info("Setting Short Answer correct answer: " + correctAnswer);
+    }
+
+    private String getRequiredParameter(HttpServletRequest request, String paramName) throws IllegalArgumentException {
+        String value = request.getParameter(paramName);
+        if (value == null || value.trim().isEmpty()) {
+            throw new IllegalArgumentException("Missing required parameter: " + paramName);
+        }
+        return value.trim();
+    }
+
+    private void handleError(HttpServletRequest request, HttpServletResponse response, String errorMessage) throws ServletException, IOException {
+        request.setAttribute("errorMessage", errorMessage);
+        request.getRequestDispatcher("/create/addQuestions.jsp").forward(request, response);
     }
 }

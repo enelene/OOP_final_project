@@ -18,25 +18,33 @@ CREATE TABLE IF NOT EXISTS users (
 
 
 CREATE TABLE IF NOT EXISTS quizzes (
-                                       id INT PRIMARY KEY AUTO_INCREMENT,
-                                       name VARCHAR(255) NOT NULL,
-                                       description TEXT,
-                                       category VARCHAR(100),
-                                       display_on_single_page BOOLEAN,
-                                       display_in_random_order BOOLEAN,
-                                       allow_practice_mode BOOLEAN,
-                                       correct_immediately BOOLEAN,
-                                       username VARCHAR(100)
+                                    id INT PRIMARY KEY AUTO_INCREMENT,
+                                    name VARCHAR(255) NOT NULL,
+                                    description TEXT,
+                                    category ENUM('MATH', 'SCIENCE', 'HISTORY', 'LITERATURE', 'GENERAL_KNOWLEDGE') NOT NULL,
+                                    display_on_single_page BOOLEAN NOT NULL,
+                                    display_in_random_order BOOLEAN NOT NULL,
+                                    allow_practice_mode BOOLEAN NOT NULL,
+                                    correct_immediately BOOLEAN NOT NULL,
+                                    username VARCHAR(100) NOT NULL,
+                                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS questions (
-                                         id INT PRIMARY KEY AUTO_INCREMENT,
-                                         quiz_id INT,
-                                         question_text TEXT,
-                                         question_type VARCHAR(20),
-                                         options TEXT,
-                                         correct_options TEXT,
-                                         FOREIGN KEY (quiz_id) REFERENCES quizzes(id)
+                                    id INT PRIMARY KEY AUTO_INCREMENT,
+                                    quiz_id INT NOT NULL,
+                                    question_text TEXT NOT NULL,
+                                    question_type ENUM('MULTIPLE_CHOICE', 'SINGLE_ANSWER', 'TRUE_FALSE', 'FILL_IN_THE_BLANK') NOT NULL,
+                                    correct_answer TEXT,
+                                    FOREIGN KEY (quiz_id) REFERENCES quizzes(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS question_options (
+                                    id INT PRIMARY KEY AUTO_INCREMENT,
+                                    question_id INT NOT NULL,
+                                    option_text TEXT NOT NULL,
+                                    is_correct BOOLEAN NOT NULL,
+                                    FOREIGN KEY (question_id) REFERENCES questions(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS `relations` (

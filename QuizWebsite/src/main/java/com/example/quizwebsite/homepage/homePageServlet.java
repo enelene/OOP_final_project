@@ -36,7 +36,7 @@ public class homePageServlet extends HttpServlet {
                     request.getRequestDispatcher("/homepage/home.jsp").forward(request, response);
                     break;
                 case "createQuiz":
-                    // Handle navigation to create quiz page
+                    System.out.println("Forwarding to create quiz page");
                     request.getRequestDispatcher("/create/createQuiz.jsp").forward(request, response);
                     break;
                 case "takeQuiz":

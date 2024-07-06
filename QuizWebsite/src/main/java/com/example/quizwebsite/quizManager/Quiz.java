@@ -1,29 +1,42 @@
 package com.example.quizwebsite.quizManager;
 
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Objects;
 
 public class Quiz {
     private int id;
     private String name;
     private String description;
-    private String category;
+    private QuizCategory category;
     private boolean displayOnSinglePage;
     private boolean displayInRandomOrder;
     private boolean allowPracticeMode;
     private boolean correctImmediately;
+<<<<<<< Updated upstream
 
     //private List<Question> questions; // Assuming you have a Question class to represent quiz questions
    private String quizOwner;
+=======
+    private List<Question> questions;
+>>>>>>> Stashed changes
 
-    public Quiz(String name, String description, String category, boolean displayOnSinglePage,
+    public Quiz(String name, String description, QuizCategory category, boolean displayOnSinglePage,
                 boolean displayInRandomOrder, boolean allowPracticeMode, boolean correctImmediately) {
-        this.name = name;
-        this.description = description;
-        this.category = category;
+        this(0, name, description, category, displayOnSinglePage, displayInRandomOrder, allowPracticeMode, correctImmediately);
+    }
+
+    public Quiz(int id, String name, String description, QuizCategory category, boolean displayOnSinglePage,
+                boolean displayInRandomOrder, boolean allowPracticeMode, boolean correctImmediately) {
+        this.id = id;
+        this.name = Objects.requireNonNull(name, "Name cannot be null");
+        this.description = Objects.requireNonNull(description, "Description cannot be null");
+        this.category = Objects.requireNonNull(category, "Category cannot be null");
         this.displayOnSinglePage = displayOnSinglePage;
         this.displayInRandomOrder = displayInRandomOrder;
         this.allowPracticeMode = allowPracticeMode;
         this.correctImmediately = correctImmediately;
+        this.questions = new ArrayList<>();
     }
 
     public Quiz(String name, String description, String category, boolean displayOnSinglePage,
@@ -51,7 +64,7 @@ public class Quiz {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = Objects.requireNonNull(name, "Name cannot be null");
     }
 
     public String getDescription() {
@@ -59,15 +72,27 @@ public class Quiz {
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.description = Objects.requireNonNull(description, "Description cannot be null");
     }
 
-    public String getCategory() {
+    public QuizCategory getCategory() {  // Changed return type to QuizCategory
         return category;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setCategory(QuizCategory category) {  // Changed parameter type to QuizCategory
+        this.category = Objects.requireNonNull(category, "Category cannot be null");
+    }
+
+    public List<Question> getQuestions() {
+        return new ArrayList<>(questions);
+    }
+
+    public void addQuestion(Question question) {
+        this.questions.add(Objects.requireNonNull(question, "Question cannot be null"));
+    }
+
+    public void removeQuestion(Question question) {
+        this.questions.remove(question);
     }
 
     public boolean isDisplayOnSinglePage() {
@@ -102,6 +127,7 @@ public class Quiz {
         this.correctImmediately = correctImmediately;
     }
 
+<<<<<<< Updated upstream
     public String getQuizOwner() {
         return quizOwner;
     }
@@ -113,10 +139,32 @@ public class Quiz {
 
 
     // public List<Question> getQuestions() {
+=======
+    @Override
+    public String toString() {
+        return "Quiz{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", category=" + category +
+                ", displayOnSinglePage=" + displayOnSinglePage +
+                ", displayInRandomOrder=" + displayInRandomOrder +
+                ", allowPracticeMode=" + allowPracticeMode +
+                ", correctImmediately=" + correctImmediately +
+                ", questionCount=" + questions.size() +
+                '}';
+    }
+   // public List<Question> getQuestions() {
+>>>>>>> Stashed changes
    //     return questions;
    // }
 
    // public void setQuestions(List<Question> questions) {
     //    this.questions = questions;
     //}
+}
+
+enum QuizCategory {
+    MATH, SCIENCE, HISTORY, LITERATURE, GENERAL_KNOWLEDGE
+    // Add more categories as needed
 }
