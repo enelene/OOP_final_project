@@ -1,4 +1,4 @@
-package com.example.quizwebsite.userManager;
+package com.example.quizwebsite.relationManager;
 
 public enum RelationType {
     NOT_FRIENDS,

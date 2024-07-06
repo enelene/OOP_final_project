@@ -1,4 +1,6 @@
-package com.example.quizwebsite.userManager;
+package com.example.quizwebsite.relationManager;
+
+import com.example.quizwebsite.userManager.User;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -6,7 +8,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -211,6 +212,17 @@ public class RelationManager implements RelationInterface{
         }
         return RelationType.NOT_FRIENDS;
     }
+
+    @Override
+    public int getFriendsNum(int user_id) {
+        return getFriends(user_id).size();
+    }
+
+    @Override
+    public int getRequestsNum(int user_id) {
+        return getRequests(user_id).size();
+    }
+
 
     private RelationType stringToRelationType(String status, boolean flipDirection) {
         switch (status) {

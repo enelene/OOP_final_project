@@ -1,4 +1,7 @@
-package com.example.quizwebsite.userManager;
+package com.example.quizwebsite.relationManager;
+
+import com.example.quizwebsite.userManager.User;
+import com.example.quizwebsite.userManager.UserManager;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

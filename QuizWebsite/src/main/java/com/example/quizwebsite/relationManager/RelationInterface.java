@@ -1,4 +1,6 @@
-package com.example.quizwebsite.userManager;
+package com.example.quizwebsite.relationManager;
+
+import com.example.quizwebsite.userManager.User;
 
 import java.util.Set;
 
@@ -11,4 +13,7 @@ public interface RelationInterface {
     Set<User> getFriends(int user_id);
     Set<User> getRequests(int user_id);
     RelationType getRelation(int user_id1, int user_id2);
+
+    int getFriendsNum(int user_id);
+    int getRequestsNum(int user_id);
 }

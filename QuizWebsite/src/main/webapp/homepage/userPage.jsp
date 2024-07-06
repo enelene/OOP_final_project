@@ -1,4 +1,18 @@
 <!--<%@ page contentType="text/html;charset=UTF-8" language="java" %>-->
+<%@ page import="com.example.quizwebsite.relationManager.RelationManager" %>
+<%@ page import="com.example.quizwebsite.userManager.User" %>
+<%
+    User user = (User) session.getAttribute("user");
+    RelationManager relationManager = (RelationManager) application.getAttribute("relationManager");
+
+    int friendsNum = 0;
+    int requestsNum = 0;
+
+    if (relationManager != null && user != null) {
+        friendsNum = relationManager.getFriendsNum(user.getId());
+        requestsNum = relationManager.getRequestsNum(user.getId());
+    }
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,8 +44,11 @@
             <h4>Quizzes created:</h4> <!--number of quizzes created-->
         </div>
         <div class="grid-item friends-board">
-            <h4 title="Friends"><img src="icons/friends-icon.png" alt="friends icon">3</h4> <!--friends number-->
-            <h4 title="Friend requests"><img src="icons/friend-request-icon.png" alt="friend request icon">1</h4> <!--friend request number-->
+<%--            <h4 title="Friends"><img src="icons/friends-icon.png" alt="friends icon"><%= friendsNum %></h4>  <!--friends number-->--%>
+        <button class="icon-button" title="Friends" onclick="location.href='${pageContext.request.contextPath}/friends'">
+            <img src="icons/friends-icon.png" alt="friends icon"> <%= friendsNum %>
+        </button>
+        <h4 title="Friend requests"><img src="icons/friend-request-icon.png" alt="friend request icon"><%= requestsNum %></h4> <!--friend request number-->
         </div>
         <hr class="before-footer">
         <footer>@Elene&Ana&Ana</footer>
