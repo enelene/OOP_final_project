@@ -182,32 +182,6 @@ public class QuizManager {
         return questions;
     }
 
-<<<<<<< Updated upstream
-        // Existing code...
-
-    public List<Quiz> getAllQuizzes() {
-        List<Quiz> quizzes = new ArrayList<>();
-        String sql = "SELECT * FROM quizzes";
-        try (Connection conn = dataSource.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                Quiz quiz = new Quiz(
-                        rs.getString("name"),
-                        rs.getString("description"),
-                        rs.getString("category"),
-                        rs.getBoolean("display_on_single_page"),
-                        rs.getBoolean("display_in_random_order"),
-                        rs.getBoolean("allow_practice_mode"),
-                        rs.getBoolean("correct_immediately"),
-                        rs.getString("username"));
-                quizzes.add(quiz);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return quizzes;
-=======
     private void loadQuestionOptions(Connection conn, Question question) throws SQLException {
         String sql = "SELECT * FROM question_options WHERE question_id = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -225,7 +199,6 @@ public class QuizManager {
                     .collect(Collectors.toList());
             question.setCorrectAnswer(String.join(", ", correctOptions));
         }
->>>>>>> Stashed changes
     }
 
 }

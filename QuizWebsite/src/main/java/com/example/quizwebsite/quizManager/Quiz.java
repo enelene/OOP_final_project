@@ -13,13 +13,7 @@ public class Quiz {
     private boolean displayInRandomOrder;
     private boolean allowPracticeMode;
     private boolean correctImmediately;
-<<<<<<< Updated upstream
-
-    //private List<Question> questions; // Assuming you have a Question class to represent quiz questions
-   private String quizOwner;
-=======
     private List<Question> questions;
->>>>>>> Stashed changes
 
     public Quiz(String name, String description, QuizCategory category, boolean displayOnSinglePage,
                 boolean displayInRandomOrder, boolean allowPracticeMode, boolean correctImmediately) {
@@ -37,18 +31,6 @@ public class Quiz {
         this.allowPracticeMode = allowPracticeMode;
         this.correctImmediately = correctImmediately;
         this.questions = new ArrayList<>();
-    }
-
-    public Quiz(String name, String description, String category, boolean displayOnSinglePage,
-                boolean displayInRandomOrder, boolean allowPracticeMode, boolean correctImmediately, String owner) {
-        this.name = name;
-        this.description = description;
-        this.category = category;
-        this.displayOnSinglePage = displayOnSinglePage;
-        this.displayInRandomOrder = displayInRandomOrder;
-        this.allowPracticeMode = allowPracticeMode;
-        this.correctImmediately = correctImmediately;
-        this.quizOwner = owner;
     }
 
     public int getId() {
@@ -127,19 +109,6 @@ public class Quiz {
         this.correctImmediately = correctImmediately;
     }
 
-<<<<<<< Updated upstream
-    public String getQuizOwner() {
-        return quizOwner;
-    }
-
-    public void setQuizOwner(String quizOwner) {
-        this.quizOwner = quizOwner;
-    }
-
-
-
-    // public List<Question> getQuestions() {
-=======
     @Override
     public String toString() {
         return "Quiz{" +
@@ -154,12 +123,11 @@ public class Quiz {
                 ", questionCount=" + questions.size() +
                 '}';
     }
-   // public List<Question> getQuestions() {
->>>>>>> Stashed changes
-   //     return questions;
-   // }
+    // public List<Question> getQuestions() {
+    //     return questions;
+    // }
 
-   // public void setQuestions(List<Question> questions) {
+    // public void setQuestions(List<Question> questions) {
     //    this.questions = questions;
     //}
 }
