@@ -149,4 +149,30 @@ public class QuizManager {
         return questions;
     }
 
+        // Existing code...
+
+    public List<Quiz> getAllQuizzes() {
+        List<Quiz> quizzes = new ArrayList<>();
+        String sql = "SELECT * FROM quizzes";
+        try (Connection conn = dataSource.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                Quiz quiz = new Quiz(
+                        rs.getString("name"),
+                        rs.getString("description"),
+                        rs.getString("category"),
+                        rs.getBoolean("display_on_single_page"),
+                        rs.getBoolean("display_in_random_order"),
+                        rs.getBoolean("allow_practice_mode"),
+                        rs.getBoolean("correct_immediately"),
+                        rs.getString("username"));
+                quizzes.add(quiz);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return quizzes;
+    }
+
 }

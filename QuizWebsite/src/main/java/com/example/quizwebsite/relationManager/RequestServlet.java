@@ -13,6 +13,8 @@ import java.io.IOException;
 @WebServlet({"/requests"})
 public class RequestServlet extends HttpServlet {
     //Sends request. Needs from_id and to_username as parameters.
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         //todo change this method so u send request from the logged in account instead of passing id as a parameter
         RelationManager rm = (RelationManager) getServletContext().getAttribute("relationManager");
@@ -41,6 +43,7 @@ public class RequestServlet extends HttpServlet {
     }
 
     //get all users that sent particular user requests.
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //todo change this method so u send request from the logged in account instead of passing id as a parameter
         RelationManager rm = (RelationManager) getServletContext().getAttribute("relationManager");

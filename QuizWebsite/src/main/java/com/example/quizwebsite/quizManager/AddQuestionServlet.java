@@ -20,6 +20,7 @@ public class AddQuestionServlet extends HttpServlet {
         this.quizManager = new QuizManager(dataSource);
     }
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int quizId = Integer.parseInt(request.getParameter("quizId"));
         String questionText = request.getParameter("questionText");

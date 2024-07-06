@@ -1,5 +1,6 @@
 package com.example.quizwebsite.listeners;
 
+import com.example.quizwebsite.quizManager.QuizManager;
 import org.apache.commons.dbcp2.BasicDataSource;
 import com.example.quizwebsite.userManager.UserManager;
 import com.example.quizwebsite.relationManager.RelationManager;
@@ -22,12 +23,15 @@ public class DatabaseContextListener implements ServletContextListener {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setUrl("jdbc:mysql://localhost:3306/quizwebsite");
         dataSource.setUsername("root");
-        dataSource.setPassword("12345"); // Remember to change this
+        dataSource.setPassword("Elene2004!"); // Remember to change this
 
         sce.getServletContext().setAttribute("dataSource", dataSource);
 
         UserManager userManager = new UserManager(dataSource);
         sce.getServletContext().setAttribute("userManager", userManager);
+
+        QuizManager quizManager = new QuizManager(dataSource);
+        sce.getServletContext().setAttribute("quizManager", quizManager);
 
         RelationManager relationManager = new RelationManager(dataSource);
         sce.getServletContext().setAttribute("relationManager", relationManager);

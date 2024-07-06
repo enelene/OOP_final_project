@@ -23,7 +23,7 @@ public class SaveQuizServlet extends HttpServlet {
         }
         this.quizManager = new QuizManager(dataSource);
     }
-
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String name = request.getParameter("quizName");
         String description = request.getParameter("quizDescription");

@@ -11,7 +11,9 @@ public class Quiz {
     private boolean displayInRandomOrder;
     private boolean allowPracticeMode;
     private boolean correctImmediately;
-   // private List<Question> questions; // Assuming you have a Question class to represent quiz questions
+
+    //private List<Question> questions; // Assuming you have a Question class to represent quiz questions
+   private String quizOwner;
 
     public Quiz(String name, String description, String category, boolean displayOnSinglePage,
                 boolean displayInRandomOrder, boolean allowPracticeMode, boolean correctImmediately) {
@@ -22,6 +24,18 @@ public class Quiz {
         this.displayInRandomOrder = displayInRandomOrder;
         this.allowPracticeMode = allowPracticeMode;
         this.correctImmediately = correctImmediately;
+    }
+
+    public Quiz(String name, String description, String category, boolean displayOnSinglePage,
+                boolean displayInRandomOrder, boolean allowPracticeMode, boolean correctImmediately, String owner) {
+        this.name = name;
+        this.description = description;
+        this.category = category;
+        this.displayOnSinglePage = displayOnSinglePage;
+        this.displayInRandomOrder = displayInRandomOrder;
+        this.allowPracticeMode = allowPracticeMode;
+        this.correctImmediately = correctImmediately;
+        this.quizOwner = owner;
     }
 
     public int getId() {
@@ -88,7 +102,17 @@ public class Quiz {
         this.correctImmediately = correctImmediately;
     }
 
-   // public List<Question> getQuestions() {
+    public String getQuizOwner() {
+        return quizOwner;
+    }
+
+    public void setQuizOwner(String quizOwner) {
+        this.quizOwner = quizOwner;
+    }
+
+
+
+    // public List<Question> getQuestions() {
    //     return questions;
    // }
 

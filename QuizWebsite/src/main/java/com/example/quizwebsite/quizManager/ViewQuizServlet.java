@@ -23,7 +23,7 @@ public class ViewQuizServlet extends HttpServlet {
         BasicDataSource dataSource = (BasicDataSource) getServletContext().getAttribute("dataSource");
         this.quizManager = new QuizManager(dataSource);
     }
-
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int quizId = Integer.parseInt(request.getParameter("id"));
 

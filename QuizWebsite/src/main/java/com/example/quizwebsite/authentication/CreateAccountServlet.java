@@ -24,6 +24,7 @@ public class CreateAccountServlet extends HttpServlet {
 
     //todo - no usage for now, cause we use login servlet for that
     // Endpoint for viewing user's page
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         UserManager um = (UserManager) getServletContext().getAttribute("userManager");
         String username = request.getParameter("user");
