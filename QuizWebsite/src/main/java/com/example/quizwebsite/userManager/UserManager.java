@@ -82,7 +82,7 @@ public class UserManager implements UserInterface {
                 User user = new User(rs.getString("username"), rs.getString("password"));
                 user.setId(rs.getInt("id"));
                 //todo
-                user.setCookieKey();
+                //user.setCookieKey();
                 //user.setCookieKey(rs.getString("cookie_key"));
                 if(rs.getInt("is_admin") == 1) { user.makeAdmin();}
                 return user;
@@ -157,7 +157,7 @@ public class UserManager implements UserInterface {
 
     @Override
     public boolean isValidInput(String username, String password) {
-        return username != null && !username.isEmpty() && password != null && !password.isEmpty();
+        return username != "" && username != null && password != null && password != "";
     }
 
     /**

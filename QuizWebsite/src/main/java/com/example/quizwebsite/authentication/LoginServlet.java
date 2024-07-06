@@ -37,10 +37,8 @@ public class LoginServlet extends HttpServlet {
             request.getRequestDispatcher("/index.jsp").forward(request, response);
             return;
         }
-
         try {
             User user = um.getUserByUsername(username);
-
             if (user != null && um.validateUser(username, password)) {
                 request.getSession().setAttribute("user", user);
                 Cookie c;

@@ -6,11 +6,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
-// todo - no usages yet 
+// todo - no usages yet
 @WebServlet("/LogoutServlet")
 public class LogoutServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        request.getSession().removeAttribute("currentUser");
+        request.getSession().removeAttribute("user");
 
         Cookie c = new Cookie("user_key", "");
         c.setMaxAge(0);

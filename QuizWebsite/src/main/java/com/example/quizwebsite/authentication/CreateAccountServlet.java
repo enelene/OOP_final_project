@@ -44,19 +44,19 @@ public class CreateAccountServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         UserManager um = (UserManager) getServletContext().getAttribute("userManager");
         String username = request.getParameter("username");
-        String password = request.getParameter("password");
+        String passwordBeforeHash = request.getParameter("password");
+        String password;
         try {
-            password = HashingManager.generateHash(password);
+            password = HashingManager.generateHash(passwordBeforeHash);
         } catch (NoSuchAlgorithmException e) {
             throw new ServletException("Error hashing password", e);
         }
         //prohibited actions
-        if(!um.isValidInput(username,password)) {
+        if(!um.isValidInput(username,passwordBeforeHash)) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
 
-        Random r = new Random();
         // here we don't get user permission to set cookie key , it will be only available on login page
         User newUser = new User(null, username,password,false, null);
         newUser = um.addUser(newUser, password);
@@ -65,8 +65,8 @@ public class CreateAccountServlet extends HttpServlet {
             request.getRequestDispatcher("/index.jsp").forward(request, response);
         }
         //todo - I guess both work as same, will research which one is better practice
-        //request.getRequestDispatcher("/nameInUse.jsp").forward(request, response);
-        response.sendRedirect("/nameInUse.jsp");
+        request.getRequestDispatcher("/nameInUse.jsp").forward(request, response);
+        //response.sendRedirect("/nameInUse.jsp");
     }
 
     //Endpoint for deleting an account.
