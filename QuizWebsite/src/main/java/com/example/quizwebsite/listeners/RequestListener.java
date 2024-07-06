@@ -56,16 +56,15 @@ public class RequestListener implements ServletRequestListener, ServletRequestAt
     /**
      * @see ServletRequestListener#requestInitialized(ServletRequestEvent)
      */
-    public void requestInitialized(ServletRequestEvent arg0) {
+    public void requestInitialized(ServletRequestEvent event) {
         // Persistent Cookies
-        HttpServletRequest req = (HttpServletRequest) arg0.getServletRequest();
+        HttpServletRequest req = (HttpServletRequest) event.getServletRequest();
         Cookie[] cookies = req.getCookies();
 
         if(cookies != null) {
             for (int i = 0; i < cookies.length; i++){
                 Cookie cookie = cookies[i];
                 if(cookie.getName().equals("user_key")) {
-                    // todo - maybe make all usermanager functions static
                     User u = UserManager.getUserByCookieKey(cookie.getValue());
                     if(u != null) {
                         HttpSession sess = req.getSession();

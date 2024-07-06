@@ -28,11 +28,8 @@ public class homePageServlet extends HttpServlet {
             request.getRequestDispatcher("/homepage/home.jsp").forward(request, response);
         } else {
             switch (action) {
-                // todo add logout servlet
                 case "logout":
-                    // Handle logout action
-                    request.getSession().invalidate();
-                    response.sendRedirect("index.jsp");
+                    response.sendRedirect(request.getContextPath() + "/LogoutServlet");
                     break;
                 case "home":
                     // Handle navigation to home page

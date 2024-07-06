@@ -58,15 +58,13 @@ public class CreateAccountServlet extends HttpServlet {
         }
 
         // here we don't get user permission to set cookie key , it will be only available on login page
-        User newUser = new User(null, username,password,false, null);
-        newUser = um.addUser(newUser, password);
+        //todo add administrator page creating option
+        User newUser = new User(null, username, password,false, null);
+        newUser = um.addUser(newUser);
         if (newUser != null) {
-            //request.getSession().setAttribute("user", newUser);
             request.getRequestDispatcher("/index.jsp").forward(request, response);
         }
-        //todo - I guess both work as same, will research which one is better practice
         request.getRequestDispatcher("/nameInUse.jsp").forward(request, response);
-        //response.sendRedirect("/nameInUse.jsp");
     }
 
     //Endpoint for deleting an account.

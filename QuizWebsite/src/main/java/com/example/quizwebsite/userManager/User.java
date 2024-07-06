@@ -7,6 +7,8 @@ public class User {
     private boolean isAdmin;
     private String cookieKey;
 
+
+
     public User(Integer id, String username, String password, boolean isAdmin, String cookieKey) {
         this.id = id;
         this.username = username;
@@ -23,6 +25,8 @@ public class User {
     public void setUsername(String username) {
         this.username = username;
     }
+    public String getPassword() {return password;}
+    public void setPassword(String password) { this.password = password;}
     public boolean isAdmin() {
         return isAdmin;
     }
@@ -37,7 +41,7 @@ public class User {
     }
     public String getCookieKey() {return cookieKey;}
     public void setCookieKey(String key) { this.cookieKey = key;}
-    public void setPassword(String password) { this.password = password;}
+
     //todo solve relation problem
     public void setCookieKey() {this.cookieKey = "";}
 }

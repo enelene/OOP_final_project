@@ -9,7 +9,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class UserManager implements UserInterface {
+//public class UserManager implements UserInterface {
+public class UserManager {
     private static BasicDataSource dataSource;
 
     public UserManager(BasicDataSource dataSource) {
@@ -21,11 +22,10 @@ public class UserManager implements UserInterface {
      * Returns user object with id filled in.
      * Returns null if username was already in use.
      * @param user
-     * @param hashedPassword
      * @return
      */
-    @Override
-    public User addUser(User user, String hashedPassword) {
+
+    public static User addUser(User user) {
         if (userExists(user.getUsername())) {
             return null;
         }
@@ -34,7 +34,7 @@ public class UserManager implements UserInterface {
             Connection conn = dataSource.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, user.getUsername());
-            stmt.setString(2, hashedPassword);
+            stmt.setString(2, user.getPassword());
             stmt.setInt(3, user.isAdmin() ? 1 : 0);
             stmt.setString(4, user.getCookieKey());
             stmt.executeUpdate();
@@ -50,8 +50,7 @@ public class UserManager implements UserInterface {
      * @param id
      * @return
      */
-    @Override
-    public boolean deleteUser(int id) {
+    public static boolean deleteUser(int id) {
         //todo delete from friends
         int rowCount = 0;
         try {
@@ -71,20 +70,17 @@ public class UserManager implements UserInterface {
      * @param username
      * @return
      */
-    @Override
-    public User getUserByUsername(String username) {
+    public static User getUserByUsername(String username) {
         try {
             Connection conn = dataSource.getConnection();
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM `users` WHERE `username` = ?");
             stmt.setString(1, username);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                User user = new User(rs.getString("username"), rs.getString("password"));
-                user.setId(rs.getInt("id"));
-                //todo
-                //user.setCookieKey();
-                //user.setCookieKey(rs.getString("cookie_key"));
-                if(rs.getInt("is_admin") == 1) { user.makeAdmin();}
+                boolean isAdmin = false;
+                if (rs.getInt("is_admin") == 1) isAdmin = true;
+                User user = new User(rs.getInt("id"),rs.getString("username"), rs.getString("password"),isAdmin,rs.getString("cookie_Key"));
+                if (isAdmin) user.makeAdmin();
                 return user;
             }
         } catch (SQLException e) {
@@ -99,7 +95,6 @@ public class UserManager implements UserInterface {
      * @param id
      * @return
      */
-    @Override
     public User getUserById(int id) {
         try {
             Connection conn = dataSource.getConnection();
@@ -120,8 +115,7 @@ public class UserManager implements UserInterface {
         }
         return null;
     }
-    @Override
-    public boolean userExists(String username) {
+    public static boolean userExists(String username) {
         String sql = "SELECT COUNT(*) FROM users WHERE username = ?";
         try {
             Connection conn = dataSource.getConnection();
@@ -137,7 +131,6 @@ public class UserManager implements UserInterface {
         }
         return false;
     }
-    @Override
     public boolean validateUser(String username, String password) {
         String sql = "SELECT password FROM users WHERE username = ?";
         try  {
@@ -155,7 +148,6 @@ public class UserManager implements UserInterface {
         return false;
     }
 
-    @Override
     public boolean isValidInput(String username, String password) {
         return username != "" && username != null && password != null && password != "";
     }
@@ -166,12 +158,11 @@ public class UserManager implements UserInterface {
      * @param id
      * @return
      */
-    @Override
     public boolean makeUserAdmin(int id) {
         int rowCount = 0;
         try {
             Connection conn = dataSource.getConnection();
-            PreparedStatement stmt = conn.prepareStatement("UPDATE `user` SET `is_admin` = 1 WHERE `id` = ?");
+            PreparedStatement stmt = conn.prepareStatement("UPDATE `users` SET `is_admin` = 1 WHERE `id` = ?");
             stmt.setInt(1, id);
             rowCount = stmt.executeUpdate();
         } catch (SQLException e) {
@@ -180,9 +171,15 @@ public class UserManager implements UserInterface {
         return rowCount > 0;
     }
 
+    /**
+     * generates string with given id for cookie usage .
+     * @param id
+     * @return
+     */
+
     public String setCookieKey(int id) {
         String key = new BigInteger(140, new SecureRandom()).toString();
-        String sql = "UPDATE `user` SET `cookie_key` = ? WHERE `user_id` = ?";
+        String sql = "UPDATE `users` SET `cookie_key` = ? WHERE `id` = ?";
         try {
             Connection conn = dataSource.getConnection();
             PreparedStatement p = conn.prepareStatement(sql);
@@ -195,15 +192,20 @@ public class UserManager implements UserInterface {
         return key;
     }
     //todo use that
+
+    /**
+     * finds user with given cookie key for next usage .
+     * @param key
+     * @return
+     */
     public static User getUserByCookieKey(String key) {
         ResultSet r;
-        String sql = "SELECT * FROM `user` WHERE `cookie_key` = ?";
+        String sql = "SELECT * FROM `users` WHERE `cookie_key` = ?";
         try {
             Connection conn = dataSource.getConnection();
             PreparedStatement p = conn.prepareStatement(sql);
             p.setString(1, key);
             r = p.executeQuery();
-
             if(!r.next()) return null;
             User u = new User(r.getInt("id"), r.getString("username"),
                     r.getString("password"),
