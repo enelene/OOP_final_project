@@ -22,7 +22,7 @@ public class ViewQuizServlet extends HttpServlet {
     private static final Logger LOGGER = Logger.getLogger(ViewQuizServlet.class.getName());
     private static final String ERROR_PAGE = "/error.jsp";
     private static final String EDIT_PAGE = "create/editQuiz.jsp";
-    private static final String TAKE_PAGE = "quiz/takeQuiz.jsp";
+    private static final String TAKE_PAGE = "quiz/listQuizzes.jsp";
     private static final String VIEW_PAGE = "create/viewQuiz.jsp";
     private static final String MODE_PARAM = "mode";
     private static final String ID_PARAM = "id";

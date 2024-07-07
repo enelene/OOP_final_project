@@ -23,7 +23,7 @@ public class DatabaseContextListener implements ServletContextListener {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setUrl("jdbc:mysql://localhost:3306/quizwebsite");
         dataSource.setUsername("root");
-        dataSource.setPassword("Eosoxeshrca123."); // Remember to change this
+        dataSource.setPassword("Elene2004!"); // Remember to change this
 
         sce.getServletContext().setAttribute("dataSource", dataSource);
 
@@ -32,6 +32,7 @@ public class DatabaseContextListener implements ServletContextListener {
 
         QuizManager quizManager = new QuizManager(dataSource);
         sce.getServletContext().setAttribute("quizManager", quizManager);
+        System.out.println("QuizManager set in ServletContext"); // Add this line
 
         RelationManager relationManager = new RelationManager(dataSource);
         sce.getServletContext().setAttribute("relationManager", relationManager);

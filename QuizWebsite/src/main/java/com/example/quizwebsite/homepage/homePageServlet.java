@@ -41,7 +41,7 @@ public class homePageServlet extends HttpServlet {
                     break;
                 case "takeQuiz":
                     // Handle navigation to take quiz page
-                    request.getRequestDispatcher("/homepage/takeQuiz.jsp").forward(request, response);
+                    request.getRequestDispatcher( "/QuizzesServlet").forward(request, response);
                     break;
                 case "profile":
                     // Handle navigation to profile page

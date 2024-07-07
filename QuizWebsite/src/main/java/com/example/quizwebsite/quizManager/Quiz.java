@@ -274,11 +274,18 @@ public class Quiz {
 
     /**
      * Checks if the quiz is valid (has at least one question).
-     *
      * @return true if the quiz is valid, false otherwise
      */
     public boolean isValid() {
         return !questions.isEmpty();
+    }
+
+    /**
+     * retrieves specific quiz's questions.
+     * @param questions
+     */
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
     }
 }
 
