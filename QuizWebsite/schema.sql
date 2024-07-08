@@ -54,3 +54,19 @@ CREATE TABLE IF NOT EXISTS `relations` (
                                            status VARCHAR(15) NOT NULL
 );
 
+CREATE TABLE  IF NOT EXISTS notes (
+                       id INT PRIMARY KEY AUTO_INCREMENT,
+                       sender_username VARCHAR(255) NOT NULL,
+                       recipient_username VARCHAR(255) NOT NULL,
+                       message TEXT NOT NULL,
+                       timestamp DATETIME NOT NULL,
+                       is_read BOOLEAN NOT NULL DEFAULT FALSE,
+                       FOREIGN KEY (sender_username) REFERENCES users(username),
+                       FOREIGN KEY (recipient_username) REFERENCES users(username)
+);
+
+CREATE INDEX idx_sender ON notes (sender_username);
+CREATE INDEX idx_recipient ON notes (recipient_username);
+CREATE INDEX idx_timestamp ON notes (timestamp);
+
+INSERT INTO notes (sender_username, recipient_username, message, timestamp, is_read) VALUES ('elene', 'ana', 'This is the first test note from Elene to Ana.', NOW() - INTERVAL 2 DAY, TRUE), ('ana', 'elene', 'Hi Elene, thanks for your note! This is a reply.', NOW() - INTERVAL 1 DAY, FALSE), ('elene', 'ana', 'Another test note to check multiple note display.', NOW(), FALSE);
