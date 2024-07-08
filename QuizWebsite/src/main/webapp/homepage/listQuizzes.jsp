@@ -14,7 +14,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>List Quizzes</title>
-    <link rel="stylesheet" type="text/css" href="userStyles.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/userStyles.css">
     <style>
         .grid-container {
             grid-template-areas:
@@ -71,7 +71,6 @@
                 <h3><%= quiz.getName() %></h3>
                 <p><%= quiz.getDescription() %></p>
                 <p>Category: <%= quiz.getCategory() %></p>
-                <%--todo not implemented playQuizServlet--%>
                 <a href="PlayQuizServlet?quizId=<%= quiz.getId() %>">Take Quiz</a>
             </div>
             <%
