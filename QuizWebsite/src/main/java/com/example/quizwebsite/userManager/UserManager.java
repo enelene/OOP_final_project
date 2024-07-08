@@ -29,10 +29,12 @@ public class UserManager {
         if (userExists(user.getUsername())) {
             return null;
         }
+        Connection conn = null;
+        PreparedStatement stmt = null;
         String sql = "INSERT INTO users (username, password, is_admin, cookie_key) VALUES (?, ?, ?, ?)";
         try  {
-            Connection conn = dataSource.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql);
+            conn = dataSource.getConnection();
+            stmt = conn.prepareStatement(sql);
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getPassword());
             stmt.setInt(3, user.isAdmin() ? 1 : 0);
@@ -41,6 +43,18 @@ public class UserManager {
             return getUserByUsername(user.getUsername());
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally{
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+            }
+            catch (SQLException sqlee) {
+                sqlee.printStackTrace();
+            }
         }
     }
 
@@ -53,13 +67,27 @@ public class UserManager {
     public static boolean deleteUser(int id) {
         //todo delete from friends
         int rowCount = 0;
+        Connection conn = null;
+        PreparedStatement stmt = null;
         try {
-            Connection conn = dataSource.getConnection();
-            PreparedStatement stmt = conn.prepareStatement("DELETE FROM `users` WHERE `id` = ?;");
+            conn = dataSource.getConnection();
+            stmt = conn.prepareStatement("DELETE FROM `users` WHERE `id` = ?;");
             stmt.setInt(1, id);
             rowCount = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally{
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+            }
+            catch (SQLException sqlee) {
+                sqlee.printStackTrace();
+            }
         }
         return rowCount > 0;
     }
@@ -71,9 +99,11 @@ public class UserManager {
      * @return User
      */
     public static User getUserByUsername(String username) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
         try {
-            Connection conn = dataSource.getConnection();
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM `users` WHERE `username` = ?");
+            conn = dataSource.getConnection();
+            stmt = conn.prepareStatement("SELECT * FROM `users` WHERE `username` = ?");
             stmt.setString(1, username);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
@@ -85,6 +115,18 @@ public class UserManager {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally{
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+            }
+            catch (SQLException sqlee) {
+                sqlee.printStackTrace();
+            }
         }
         return null;
     }
@@ -96,9 +138,11 @@ public class UserManager {
      * @return User
      */
     public User getUserById(int id) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
         try {
-            Connection conn = dataSource.getConnection();
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM `users` WHERE `id` = ?");
+            conn = dataSource.getConnection();
+            stmt = conn.prepareStatement("SELECT * FROM `users` WHERE `id` = ?");
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
@@ -112,6 +156,18 @@ public class UserManager {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally{
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+            }
+            catch (SQLException sqlee) {
+                sqlee.printStackTrace();
+            }
         }
         return null;
     }
@@ -123,9 +179,11 @@ public class UserManager {
      */
     public static boolean userExists(String username) {
         String sql = "SELECT COUNT(*) FROM users WHERE username = ?";
+        Connection conn = null;
+        PreparedStatement stmt = null;
         try {
-            Connection conn = dataSource.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql);
+            conn = dataSource.getConnection();
+            stmt = conn.prepareStatement(sql);
             stmt.setString(1, username);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -134,6 +192,18 @@ public class UserManager {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally{
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+            }
+            catch (SQLException sqlee) {
+                sqlee.printStackTrace();
+            }
         }
         return false;
     }
@@ -146,9 +216,11 @@ public class UserManager {
      */
     public boolean validateUser(String username, String password) {
         String sql = "SELECT password FROM users WHERE username = ?";
+        Connection conn = null;
+        PreparedStatement stmt = null;
         try  {
-            Connection conn = dataSource.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql);
+            conn = dataSource.getConnection();
+            stmt = conn.prepareStatement(sql);
             stmt.setString(1, username);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -157,6 +229,18 @@ public class UserManager {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally{
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+            }
+            catch (SQLException sqlee) {
+                sqlee.printStackTrace();
+            }
         }
         return false;
     }
@@ -181,13 +265,27 @@ public class UserManager {
      */
     public boolean makeUserAdmin(int id) {
         int rowCount = 0;
+        Connection conn = null;
+        PreparedStatement stmt = null;
         try {
-            Connection conn = dataSource.getConnection();
-            PreparedStatement stmt = conn.prepareStatement("UPDATE `users` SET `is_admin` = 1 WHERE `id` = ?");
+            conn = dataSource.getConnection();
+            stmt = conn.prepareStatement("UPDATE `users` SET `is_admin` = 1 WHERE `id` = ?");
             stmt.setInt(1, id);
             rowCount = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally{
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+            }
+            catch (SQLException sqlee) {
+                sqlee.printStackTrace();
+            }
         }
         return rowCount > 0;
     }
@@ -201,14 +299,28 @@ public class UserManager {
     public String setCookieKey(int id) {
         String key = new BigInteger(140, new SecureRandom()).toString();
         String sql = "UPDATE `users` SET `cookie_key` = ? WHERE `id` = ?";
+        Connection conn = null;
+        PreparedStatement stmt = null;
         try {
-            Connection conn = dataSource.getConnection();
-            PreparedStatement p = conn.prepareStatement(sql);
-            p.setString(1, key);
-            p.setInt(2, id);
-            p.executeUpdate();
+            conn = dataSource.getConnection();
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, key);
+            stmt.setInt(2, id);
+            stmt.executeUpdate();
         } catch(SQLException ignored) {
             return null;
+        } finally{
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+            }
+            catch (SQLException sqlee) {
+                sqlee.printStackTrace();
+            }
         }
         return key;
     }
@@ -222,11 +334,13 @@ public class UserManager {
     public static User getUserByCookieKey(String key) {
         ResultSet r;
         String sql = "SELECT * FROM `users` WHERE `cookie_key` = ?";
+        Connection conn = null;
+        PreparedStatement stmt = null;
         try {
-            Connection conn = dataSource.getConnection();
-            PreparedStatement p = conn.prepareStatement(sql);
-            p.setString(1, key);
-            r = p.executeQuery();
+            conn = dataSource.getConnection();
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, key);
+            r = stmt.executeQuery();
             if(!r.next()) return null;
             User u = new User(r.getInt("id"), r.getString("username"),
                     r.getString("password"),
@@ -235,6 +349,18 @@ public class UserManager {
             return u;
         } catch (SQLException e) {
             return null;
+        } finally{
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+            }
+            catch (SQLException sqlee) {
+                sqlee.printStackTrace();
+            }
         }
     }
 }
