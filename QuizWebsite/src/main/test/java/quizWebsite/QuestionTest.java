@@ -1,70 +1,145 @@
 package quizWebsite;
+
+import java.util.*;
 import com.example.quizwebsite.quizManager.Question;
 import com.example.quizwebsite.quizManager.QuestionType;
-import org.apache.commons.dbcp2.BasicDataSource;
+import org.junit.Before;
 import org.junit.jupiter.api.*;
-
-import java.sql.Connection;
-import java.sql.Statement;
-import java.sql.SQLException;
-
 import static org.junit.jupiter.api.Assertions.*;
+import java.security.NoSuchAlgorithmException;
+import junit.framework.TestCase;
+public class QuestionTest extends TestCase {
 
-public class QuestionTest {
-    private static BasicDataSource dataSource;
-    private static Question question;
+    private Question question;
+    private int quizId;
+    private String text;
+    private QuestionType type;
 
-    @BeforeAll
-    public static void setup() {
-        // Set up the database connection pool
-        dataSource = new BasicDataSource();
-        dataSource.setUrl("jdbc:mysql://localhost/test_quiz_website_db");
-        dataSource.setUsername("root");
-        dataSource.setPassword("password");
+    public void setUp() {
+        quizId = 1;
+        text = "What is 2+2?";
+        type = QuestionType.MULTIPLE_CHOICE;
+        question = new Question(quizId, text, type);
     }
 
-    @BeforeEach
-    public void beforeEach() throws SQLException {
-        try (Connection conn = dataSource.getConnection(); Statement stmt = conn.createStatement()) {
-            // Clear existing data and insert test data if needed
-            stmt.executeUpdate("DELETE FROM questions");
-            stmt.executeUpdate("INSERT INTO questions (quiz_id, text, type) VALUES (1, 'Test question?', 'MULTIPLE_CHOICE')");
-        }
-        question = new Question(1, "Test question?", QuestionType.MULTIPLE_CHOICE);
+    public void testConstructorAndGetters() {
+        assertEquals(quizId, question.getQuizId());
+        assertEquals(text, question.getText());
+        assertEquals(type, question.getType());
+        assertTrue(question.getOptions().isEmpty());
+        assertTrue(question.getCorrectOptions().isEmpty());
     }
 
-    @AfterEach
-    public void cleanUp() throws SQLException {
-        try (Connection conn = dataSource.getConnection(); Statement stmt = conn.createStatement()) {
-            stmt.executeUpdate("DELETE FROM questions");
-        }
-    }
+    public void testSetId() {
+        Question question1 = new Question(2,"test Question",QuestionType.MULTIPLE_CHOICE);
+        question1.setId(5);
+        assertEquals(5, question1.getId());
 
-    @Test
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            question1.setId(-1);
+        });
+        assertEquals("ID must be non-negative", exception.getMessage());
+    }
+    public void testSetQuizId() {
+        question.setQuizId(2);
+        assertEquals(2, question.getQuizId());
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            question.setQuizId(-1);
+        });
+        assertEquals("Quiz ID must be non-negative", exception.getMessage());
+    }
+    public void testSetText() {
+        question.setText("What is 3+3?");
+        assertEquals("What is 3+3?", question.getText());
+
+        Exception exception = assertThrows(NullPointerException.class, () -> {
+            question.setText(null);
+        });
+        assertEquals("Question text cannot be null", exception.getMessage());
+    }
+    public void testSetType() {
+        question.setType(QuestionType.TRUE_FALSE);
+        assertEquals(QuestionType.TRUE_FALSE, question.getType());
+
+        Exception exception = assertThrows(NullPointerException.class, () -> {
+            question.setType(null);
+        });
+        assertEquals("Question type cannot be null", exception.getMessage());
+    }
+    public void testSetOptions() {
+        List<String> options = Arrays.asList("3", "4");
+        question.setOptions(options);
+        assertEquals(options, question.getOptions());
+
+        Exception exception = assertThrows(NullPointerException.class, () -> {
+            question.setOptions(null);
+        });
+        assertEquals("Options list cannot be null", exception.getMessage());
+    }
+    public void testSetCorrectOptions() {
+        List<Boolean> correctOptions = Arrays.asList(false, true);
+        question.setCorrectOptions(correctOptions);
+        assertEquals(correctOptions, question.getCorrectOptions());
+
+        Exception exception = assertThrows(NullPointerException.class, () -> {
+            question.setCorrectOptions(null);
+        });
+        assertEquals("Correct options list cannot be null", exception.getMessage());
+    }
     public void testAddOption() {
-        question.addOption("Option 1", true);
-        question.addOption("Option 2", false);
-        assertEquals(2, question.getOptionCount());
+        question.addOption("3", false);
+        question.addOption("4", true);
+
+        assertEquals(Arrays.asList("3", "4"), question.getOptions());
+        assertEquals(Arrays.asList(false, true), question.getCorrectOptions());
+
+        Exception exception = assertThrows(NullPointerException.class, () -> {
+            question.addOption(null, false);
+        });
+        assertEquals("Option cannot be null", exception.getMessage());
+    }
+    public void testClearOptions() {
+        question.addOption("3", false);
+        question.addOption("4", true);
+
+        question.clearOptions();
+        assertTrue(question.getOptions().isEmpty());
+        assertTrue(question.getCorrectOptions().isEmpty());
+    }
+    public void testHasCorrectOption() {
+        assertFalse(question.hasCorrectOption());
+
+        question.addOption("3", false);
+        question.addOption("4", true);
         assertTrue(question.hasCorrectOption());
     }
-
-    @Test
-    public void testClearOptions() {
-        question.addOption("Option 1", true);
-        question.clearOptions();
+    public void testGetOptionCount() {
         assertEquals(0, question.getOptionCount());
-        assertFalse(question.hasCorrectOption());
-    }
 
-    @Test
+        question.addOption("3", false);
+        question.addOption("4", true);
+        assertEquals(2, question.getOptionCount());
+    }
     public void testIsValid() {
-        question.addOption("Option 1", true);
-        question.addOption("Option 2", false);
-        assertTrue(question.isValid());
+        Question multipleChoiceQuestion = new Question(1, "What is 2+2?", QuestionType.MULTIPLE_CHOICE);
+        assertFalse(multipleChoiceQuestion.isValid());
 
-        Question invalidQuestion = new Question(1, "Invalid?", QuestionType.MULTIPLE_CHOICE);
-        assertFalse(invalidQuestion.isValid());
+        multipleChoiceQuestion.addOption("3", false);
+        multipleChoiceQuestion.addOption("4", true);
+        assertTrue(multipleChoiceQuestion.isValid());
+
+        Question trueFalseQuestion = new Question(1, "2+2=4", QuestionType.TRUE_FALSE);
+        assertFalse(trueFalseQuestion.isValid());
+
+        trueFalseQuestion.addOption("True", true);
+        trueFalseQuestion.addOption("False", false);
+        assertTrue(trueFalseQuestion.isValid());
+
+        Question singleAnswerQuestion = new Question(1, "What is the capital of France?", QuestionType.SINGLE_ANSWER);
+        assertFalse(singleAnswerQuestion.isValid());
+
+        singleAnswerQuestion.setCorrectAnswer("Paris");
+        assertTrue(singleAnswerQuestion.isValid());
     }
-
-    // Add more tests as needed
 }

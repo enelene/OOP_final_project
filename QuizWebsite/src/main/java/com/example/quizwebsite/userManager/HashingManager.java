@@ -5,7 +5,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class HashingManager {
     public static String generateHash(String targ) throws NoSuchAlgorithmException {
-        MessageDigest md = MessageDigest.getInstance("SHA-1");
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
         md.update(targ.getBytes());
         return hexToString(md.digest());
     }

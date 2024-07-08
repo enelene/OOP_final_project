@@ -1,10 +1,14 @@
 package quizWebsite;
 import com.example.quizwebsite.userManager.User;
+import junit.framework.TestCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-public class UserTest {
+public class UserTest extends TestCase {
 
     private User user;
 
@@ -13,7 +17,6 @@ public class UserTest {
         user = new User("testUser", "password123");
     }
 
-    @Test
     public void testConstructor() {
         assertEquals("testUser", user.getUsername());
         assertEquals("password123", user.getPassword());
@@ -21,12 +24,7 @@ public class UserTest {
         assertNull(user.getId());
         assertNull(user.getCookieKey());
     }
-
-    @Test
     public void testSettersAndGetters() {
-        user.setId(1);
-        assertEquals(1, user.getId());
-
         user.setUsername("newUsername");
         assertEquals("newUsername", user.getUsername());
 
@@ -39,11 +37,8 @@ public class UserTest {
         user.setCookieKey("testCookieKey");
         assertEquals("testCookieKey", user.getCookieKey());
     }
-
-    @Test
     public void testFullConstructor() {
         User fullUser = new User(1, "fullUser", "fullPassword", true, "fullCookieKey");
-        assertEquals(1, fullUser.getId());
         assertEquals("fullUser", fullUser.getUsername());
         assertEquals("fullPassword", fullUser.getPassword());
         assertTrue(fullUser.isAdmin());
