@@ -71,7 +71,7 @@
                 <h3><%= quiz.getName() %></h3>
                 <p><%= quiz.getDescription() %></p>
                 <p>Category: <%= quiz.getCategory() %></p>
-                <a href="PlayQuizServlet?quizId=<%= quiz.getId() %>">Take Quiz</a>
+                <a href="${pageContext.request.contextPath}/aboutQuiz?quizId=<%= quiz.getId() %>">About Quiz</a>
             </div>
             <%
                 }
