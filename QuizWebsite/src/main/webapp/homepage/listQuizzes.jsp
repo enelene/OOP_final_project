@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Enele
-  Date: 7/7/2024
-  Time: 1:23 AM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.example.quizwebsite.quizManager.Quiz" %>
 <%@ page import="java.util.List" %>
@@ -71,7 +64,7 @@
                 <h3><%= quiz.getName() %></h3>
                 <p><%= quiz.getDescription() %></p>
                 <p>Category: <%= quiz.getCategory() %></p>
-                <a href="PlayQuizServlet?quizId=<%= quiz.getId() %>">Take Quiz</a>
+                <a href="${pageContext.request.contextPath}/aboutQuiz?quizId=<%= quiz.getId() %>">About Quiz</a>
             </div>
             <%
                 }

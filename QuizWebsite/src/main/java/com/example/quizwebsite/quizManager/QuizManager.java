@@ -1,7 +1,10 @@
 package com.example.quizwebsite.quizManager;
 
+import com.example.quizwebsite.userManager.User;
 import org.apache.commons.dbcp2.BasicDataSource;
+
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -17,14 +20,18 @@ public class QuizManager {
     private static final String INSERT_QUIZ_SQL = "INSERT INTO quizzes (name, description, category, display_on_single_page, display_in_random_order, allow_practice_mode, correct_immediately, username) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String INSERT_QUESTION_SQL = "INSERT INTO questions (quiz_id, question_text, question_type, correct_answer) VALUES (?, ?, ?, ?)";
     private static final String INSERT_OPTION_SQL = "INSERT INTO question_options (question_id, option_text, is_correct) VALUES (?, ?, ?)";
+    private static final String INSERT_ATTEMPT_SQL = "INSERT INTO attempts (quiz_id, user_id, score, time) VALUES (?, ?, ?, ?)";
     private static final String SELECT_QUIZ_SQL = "SELECT * FROM quizzes WHERE id = ?";
     private static final String SELECT_QUESTIONS_SQL = "SELECT * FROM questions WHERE quiz_id = ?";
     private static final String SELECT_OPTIONS_SQL = "SELECT * FROM question_options WHERE question_id = ?";
+    private static final String SELECT_AVERAGE_SCORE_SQL = "SELECT AVG(score) AS average_score FROM attempts WHERE quiz_id = ?;";
+    private static final String SELECT_COUNT_SQL = "SELECT COUNT(*) FROM attempts WHERE quiz_id = ?;";
 
     private final BasicDataSource dataSource;
 
     /**
      * Constructs a QuizManager with the given data source.
+     *
      * @param dataSource the data source to use for database connections
      * @throws IllegalArgumentException if the data source is null
      */
@@ -37,7 +44,8 @@ public class QuizManager {
 
     /**
      * Saves a quiz to the database.
-     * @param quiz the quiz to save
+     *
+     * @param quiz     the quiz to save
      * @param username the username of the quiz creator
      * @return the ID of the saved quiz
      * @throws SQLException if a database error occurs
@@ -60,8 +68,9 @@ public class QuizManager {
 
     /**
      * Sets the parameters for a quiz PreparedStatement.
-     * @param stmt the PreparedStatement to set parameters for
-     * @param quiz the Quiz object containing the parameter values
+     *
+     * @param stmt     the PreparedStatement to set parameters for
+     * @param quiz     the Quiz object containing the parameter values
      * @param username the username of the quiz creator
      * @throws SQLException if a database error occurs
      */
@@ -78,6 +87,7 @@ public class QuizManager {
 
     /**
      * Saves a question to the database.
+     *
      * @param question the question to save
      * @return true if the question was saved successfully, false otherwise
      * @throws SQLException if a database error occurs
@@ -97,6 +107,7 @@ public class QuizManager {
 
     /**
      * Saves a multiple-choice question to the database.
+     *
      * @param question the multiple-choice question to save
      * @return true if the question was saved successfully, false otherwise
      * @throws SQLException if a database error occurs
@@ -116,9 +127,10 @@ public class QuizManager {
 
     /**
      * Saves options for a question to the database.
-     * @param conn the database connection
-     * @param questionId the ID of the question
-     * @param options the list of options
+     *
+     * @param conn           the database connection
+     * @param questionId     the ID of the question
+     * @param options        the list of options
      * @param correctOptions the list indicating which options are correct
      * @return true if all options were saved successfully, false otherwise
      * @throws SQLException if a database error occurs
@@ -138,6 +150,7 @@ public class QuizManager {
 
     /**
      * Saves a true/false question to the database.
+     *
      * @param question the true/false question to save
      * @return true if the question was saved successfully, false otherwise
      * @throws SQLException if a database error occurs
@@ -159,6 +172,7 @@ public class QuizManager {
 
     /**
      * Saves a single answer question to the database.
+     *
      * @param question the single answer question to save
      * @return true if the question was saved successfully, false otherwise
      * @throws SQLException if a database error occurs
@@ -174,7 +188,8 @@ public class QuizManager {
 
     /**
      * Sets the parameters for a question PreparedStatement.
-     * @param stmt the PreparedStatement to set parameters for
+     *
+     * @param stmt     the PreparedStatement to set parameters for
      * @param question the Question object containing the parameter values
      * @throws SQLException if a database error occurs
      */
@@ -187,6 +202,7 @@ public class QuizManager {
 
     /**
      * Retrieves the generated ID from a PreparedStatement after execution.
+     *
      * @param stmt the PreparedStatement that was executed
      * @return the generated ID
      * @throws SQLException if a database error occurs or no ID was generated
@@ -203,6 +219,7 @@ public class QuizManager {
 
     /**
      * Retrieves a quiz by its ID.
+     *
      * @param quizId the ID of the quiz to retrieve
      * @return the Quiz object, or null if not found
      * @throws SQLException if a database error occurs
@@ -222,6 +239,7 @@ public class QuizManager {
 
     /**
      * Creates a Quiz object from a ResultSet.
+     *
      * @param rs the ResultSet containing quiz data
      * @return a new Quiz object
      * @throws SQLException if a database error occurs
@@ -241,6 +259,7 @@ public class QuizManager {
 
     /**
      * Retrieves all questions for a given quiz ID.
+     *
      * @param quizId the ID of the quiz
      * @return a List of Question objects
      * @throws SQLException if a database error occurs
@@ -263,6 +282,7 @@ public class QuizManager {
 
     /**
      * Creates a Question object from a ResultSet.
+     *
      * @param rs the ResultSet containing question data
      * @return a new Question object
      * @throws SQLException if a database error occurs
@@ -280,7 +300,8 @@ public class QuizManager {
 
     /**
      * Loads options for a question from the database.
-     * @param conn the database connection
+     *
+     * @param conn     the database connection
      * @param question the Question object to load options for
      * @throws SQLException if a database error occurs
      */
@@ -298,6 +319,7 @@ public class QuizManager {
 
     /**
      * Updates the correct answer for a multiple-choice question if it's not set.
+     *
      * @param question the Question object to update
      */
     private void updateMultipleChoiceCorrectAnswer(Question question) {
@@ -317,7 +339,7 @@ public class QuizManager {
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 QuizCategory category = QuizCategory.valueOf(rs.getString("category"));
-                Quiz quiz = new Quiz( rs.getInt("id"),
+                Quiz quiz = new Quiz(rs.getInt("id"),
                         rs.getString("name"),
                         rs.getString("description"),
                         category,
@@ -333,5 +355,142 @@ public class QuizManager {
             e.printStackTrace();
         }
         return quizzes;
+    }
+
+
+    public List<Attempt> getAttemptsByQuizId(int quizId, boolean sortByScore, boolean sortByTime, boolean ascending, int intervalInHours, int userId) {
+        List<Attempt> attempts = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try {
+            conn = dataSource.getConnection();
+            StringBuilder queryBuilder = new StringBuilder("SELECT * FROM attempts WHERE quiz_id = ?");
+            if (userId > -1) {
+                queryBuilder.append(" AND user_id = ?");
+            }
+            if (intervalInHours > 0) {
+                queryBuilder.append(" AND time >= NOW() - INTERVAL ").append(intervalInHours).append(" HOUR");
+            }
+            if (sortByScore) {
+                queryBuilder.append(" ORDER BY score ").append(ascending ? "ASC;" : "DESC;");
+            } else if (sortByTime) {
+                queryBuilder.append(" ORDER BY time ").append(ascending ? "ASC;" : "DESC;");
+            }
+            stmt = conn.prepareStatement(queryBuilder.toString());
+            stmt.setInt(1, quizId);
+            if (userId > -1) {
+                stmt.setInt(2, userId);
+            }
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Attempt attempt = createAttemptFromResultSet(rs);
+                attempts.add(attempt);
+            }
+            return attempts;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+            } catch (SQLException sqlee) {
+                sqlee.printStackTrace();
+            }
+        }
+    }
+
+    public int getAverageScoreOfQuiz(int quizId){
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try{
+            conn = dataSource.getConnection();
+            stmt = conn.prepareStatement(SELECT_AVERAGE_SCORE_SQL);
+            stmt.setInt(1, quizId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+            }
+            catch (SQLException sqlee) {
+                sqlee.printStackTrace();
+            }
+        }
+        return 0;
+    }
+
+    public int getAttemptCountOfQuiz(int quizId){
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try{
+            conn = dataSource.getConnection();
+            stmt = conn.prepareStatement(SELECT_COUNT_SQL);
+            stmt.setInt(1, quizId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+            }
+            catch (SQLException sqlee) {
+                sqlee.printStackTrace();
+            }
+        }
+        return 0;
+    }
+
+    public void addAttempt(int quizId, int userId, int score, LocalDateTime time) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try{
+            conn = dataSource.getConnection();
+            pstmt = conn.prepareStatement(INSERT_ATTEMPT_SQL);
+            pstmt.setInt(1, quizId);
+            pstmt.setInt(2, userId);
+            pstmt.setInt(3, score);
+            pstmt.setTimestamp(4, Timestamp.valueOf(time));
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+                if (pstmt != null) {
+                    pstmt.close();
+                }
+            }
+            catch (SQLException sqlee) {
+                sqlee.printStackTrace();
+            }
+        }
+    }
+
+
+    private Attempt createAttemptFromResultSet(ResultSet rs) throws SQLException {
+        return new Attempt(rs.getInt(3), rs.getInt(2), rs.getInt(4), rs.getTimestamp(5).toLocalDateTime());
     }
 }

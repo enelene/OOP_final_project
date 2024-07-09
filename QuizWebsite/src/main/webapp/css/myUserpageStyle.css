@@ -1,0 +1,60 @@
+/* Example CSS for userStyles.css */
+.grid-container {
+    display: grid;
+    grid-template-areas:
+        'header header header'
+        'nav content search'
+        'achievement achievement search'
+        'friends friends search'
+        'add add search'
+        'footer footer footer';
+    grid-gap: 10px;
+    padding: 10px;
+}
+
+.grid-item {
+    padding: 20px;
+    font-size: 18px;
+}
+
+.header {
+    grid-area: header;
+    text-align: center;
+}
+
+.nav {
+    grid-area: nav;
+    text-align: center;
+}
+
+.content {
+    grid-area: content;
+    text-align: center;
+}
+
+.achievement-board {
+    grid-area: achievement;
+    text-align: center;
+}
+
+.friends-board {
+    grid-area: friends;
+    text-align: center;
+}
+
+.add-friend {
+    grid-area: add;
+    text-align: center;
+}
+
+.search-friend {
+    grid-area: search;
+    text-align: center;
+    justify-self: end;
+}
+
+footer {
+    grid-area: footer;
+    text-align: center;
+    padding-top: 20px;
+}

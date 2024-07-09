@@ -43,6 +43,15 @@
     <div class="grid-item content">
         <h2> ${user.getUsername()}'s Profile</h2>
     </div>
+    <div class="grid-item search-friend">
+        <h3>Search for a Friend</h3>
+        <form action="${pageContext.request.contextPath}/users" method="get">
+            <label for="searchUsername">Username:</label>
+            <input type="text" id="searchUsername" name="friendId" required>
+            <button type="submit">Search</button>
+        </form>
+    </div> <%-- search bar    --%>
+
     <div class="grid-item achievement-board">
         <h3>Achievement Board</h3>
         <h4>Total score:</h4> <!--overall score number-->
@@ -53,12 +62,13 @@
         <button class="icon-button" title="Friends"
                 onclick="location.href='${pageContext.request.contextPath}/friends'">
             <img src="icons/friends-icon.png" alt="friends icon"> <%= friendsNum %>
-        </button>
+        </button> <!--number of friends-->
         <button class="icon-button" title="Requests"
                 onclick="location.href='${pageContext.request.contextPath}/requests'">
             <img src="icons/friend-request-icon.png" alt="friend request icon"> <%= requestsNum %>
-        </button>
+        </button> <!--number of friend requests-->
     </div>
+
     <hr class="before-footer">
     <footer>@Elene&Ana&Ana</footer>
 </div>

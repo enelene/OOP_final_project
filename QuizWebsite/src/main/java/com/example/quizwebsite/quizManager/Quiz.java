@@ -292,7 +292,7 @@ public class Quiz {
 /**
  * Enumeration of quiz categories.
  */
-public enum QuizCategory {
+enum QuizCategory {
     MATH, SCIENCE, HISTORY, LITERATURE, GENERAL_KNOWLEDGE
     // Add more categories as needed
 }
