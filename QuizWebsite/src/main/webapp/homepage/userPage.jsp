@@ -42,7 +42,7 @@
     <div class="grid-item search-friend">
         <h3>Search for a Friend</h3>
         <form action="${pageContext.request.contextPath}/users" method="get">
-            <label for="searchUsername">Username:</label>dow
+            <label for="searchUsername">Username:</label>
             <input type="text" id="searchUsername" name="friendUsername" required>
             <button type="submit">Search</button>
         </form>

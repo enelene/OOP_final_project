@@ -21,10 +21,10 @@ public class UserManager {
      * Takes user object with null id, adds it to database.
      * Returns user object with id filled in.
      * Returns null if username was already in use.
+     *
      * @param user
      * @return User
      */
-
     public static User addUser(User user) {
         if (userExists(user.getUsername())) {
             return null;
@@ -32,7 +32,7 @@ public class UserManager {
         Connection conn = null;
         PreparedStatement stmt = null;
         String sql = "INSERT INTO users (username, password, is_admin, cookie_key) VALUES (?, ?, ?, ?)";
-        try  {
+        try {
             conn = dataSource.getConnection();
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, user.getUsername());
@@ -43,7 +43,7 @@ public class UserManager {
             return getUserByUsername(user.getUsername());
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally{
+        } finally {
             try {
                 if (conn != null) {
                     conn.close();
@@ -51,8 +51,7 @@ public class UserManager {
                 if (stmt != null) {
                     stmt.close();
                 }
-            }
-            catch (SQLException sqlee) {
+            } catch (SQLException sqlee) {
                 sqlee.printStackTrace();
             }
         }
@@ -61,6 +60,7 @@ public class UserManager {
     /**
      * deletes user given the id.
      * returns true if user existed before the change.
+     *
      * @param id
      * @return boolean
      */
@@ -76,7 +76,7 @@ public class UserManager {
             rowCount = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally{
+        } finally {
             try {
                 if (conn != null) {
                     conn.close();
@@ -84,8 +84,7 @@ public class UserManager {
                 if (stmt != null) {
                     stmt.close();
                 }
-            }
-            catch (SQLException sqlee) {
+            } catch (SQLException sqlee) {
                 sqlee.printStackTrace();
             }
         }
@@ -95,6 +94,7 @@ public class UserManager {
     /**
      * Returns user with given username from database.
      * Returns null if no user found.
+     *
      * @param username
      * @return User
      */
@@ -109,13 +109,13 @@ public class UserManager {
             if (rs.next()) {
                 boolean isAdmin = false;
                 if (rs.getInt("is_admin") == 1) isAdmin = true;
-                User user = new User(rs.getInt("id"),rs.getString("username"), rs.getString("password"),isAdmin,rs.getString("cookie_Key"));
+                User user = new User(rs.getInt("id"), rs.getString("username"), rs.getString("password"), isAdmin, rs.getString("cookie_Key"));
                 if (isAdmin) user.makeAdmin();
                 return user;
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally{
+        } finally {
             try {
                 if (conn != null) {
                     conn.close();
@@ -123,8 +123,7 @@ public class UserManager {
                 if (stmt != null) {
                     stmt.close();
                 }
-            }
-            catch (SQLException sqlee) {
+            } catch (SQLException sqlee) {
                 sqlee.printStackTrace();
             }
         }
@@ -134,6 +133,7 @@ public class UserManager {
     /**
      * Returns user with given id from database.
      * Returns null if no user found.
+     *
      * @param id
      * @return User
      */
@@ -146,17 +146,19 @@ public class UserManager {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                User user = new User(rs.getString("username"),rs.getString("password"));
+                User user = new User(rs.getString("username"), rs.getString("password"));
                 user.setId(rs.getInt("id"));
                 //todo
                 user.setCookieKey();
                 //user.setCookieKey(rs.getString("cookie_key"));
-                if(rs.getInt("is_admin") == 1) { user.makeAdmin();}
+                if (rs.getInt("is_admin") == 1) {
+                    user.makeAdmin();
+                }
                 return user;
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally{
+        } finally {
             try {
                 if (conn != null) {
                     conn.close();
@@ -164,8 +166,7 @@ public class UserManager {
                 if (stmt != null) {
                     stmt.close();
                 }
-            }
-            catch (SQLException sqlee) {
+            } catch (SQLException sqlee) {
                 sqlee.printStackTrace();
             }
         }
@@ -174,6 +175,7 @@ public class UserManager {
 
     /**
      * checks if user exists in database.
+     *
      * @param username
      * @return boolean
      */
@@ -192,7 +194,7 @@ public class UserManager {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally{
+        } finally {
             try {
                 if (conn != null) {
                     conn.close();
@@ -200,8 +202,7 @@ public class UserManager {
                 if (stmt != null) {
                     stmt.close();
                 }
-            }
-            catch (SQLException sqlee) {
+            } catch (SQLException sqlee) {
                 sqlee.printStackTrace();
             }
         }
@@ -210,6 +211,7 @@ public class UserManager {
 
     /**
      * checks if user exists in database.
+     *
      * @param username
      * @param password
      * @return boolean
@@ -218,7 +220,7 @@ public class UserManager {
         String sql = "SELECT password FROM users WHERE username = ?";
         Connection conn = null;
         PreparedStatement stmt = null;
-        try  {
+        try {
             conn = dataSource.getConnection();
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, username);
@@ -229,7 +231,7 @@ public class UserManager {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally{
+        } finally {
             try {
                 if (conn != null) {
                     conn.close();
@@ -237,8 +239,7 @@ public class UserManager {
                 if (stmt != null) {
                     stmt.close();
                 }
-            }
-            catch (SQLException sqlee) {
+            } catch (SQLException sqlee) {
                 sqlee.printStackTrace();
             }
         }
@@ -248,6 +249,7 @@ public class UserManager {
     /**
      * checks that user is not trying to
      * create account with empty credentials
+     *
      * @param username
      * @param password
      * @return boolean
@@ -260,6 +262,7 @@ public class UserManager {
     /**
      * makes user with given id an admin.
      * returns true if user exists.
+     *
      * @param id
      * @return boolean
      */
@@ -274,7 +277,7 @@ public class UserManager {
             rowCount = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally{
+        } finally {
             try {
                 if (conn != null) {
                     conn.close();
@@ -282,8 +285,7 @@ public class UserManager {
                 if (stmt != null) {
                     stmt.close();
                 }
-            }
-            catch (SQLException sqlee) {
+            } catch (SQLException sqlee) {
                 sqlee.printStackTrace();
             }
         }
@@ -292,6 +294,7 @@ public class UserManager {
 
     /**
      * generates string with given id for cookie usage .
+     *
      * @param id
      * @return String
      */
@@ -307,9 +310,9 @@ public class UserManager {
             stmt.setString(1, key);
             stmt.setInt(2, id);
             stmt.executeUpdate();
-        } catch(SQLException ignored) {
+        } catch (SQLException ignored) {
             return null;
-        } finally{
+        } finally {
             try {
                 if (conn != null) {
                     conn.close();
@@ -317,8 +320,7 @@ public class UserManager {
                 if (stmt != null) {
                     stmt.close();
                 }
-            }
-            catch (SQLException sqlee) {
+            } catch (SQLException sqlee) {
                 sqlee.printStackTrace();
             }
         }
@@ -328,6 +330,7 @@ public class UserManager {
 
     /**
      * finds user with given cookie key for next usage .
+     *
      * @param key
      * @return User
      */
@@ -341,7 +344,7 @@ public class UserManager {
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, key);
             r = stmt.executeQuery();
-            if(!r.next()) return null;
+            if (!r.next()) return null;
             User u = new User(r.getInt("id"), r.getString("username"),
                     r.getString("password"),
                     r.getInt("is_admin") == 1 ? true : false,
@@ -349,7 +352,7 @@ public class UserManager {
             return u;
         } catch (SQLException e) {
             return null;
-        } finally{
+        } finally {
             try {
                 if (conn != null) {
                     conn.close();
@@ -357,8 +360,7 @@ public class UserManager {
                 if (stmt != null) {
                     stmt.close();
                 }
-            }
-            catch (SQLException sqlee) {
+            } catch (SQLException sqlee) {
                 sqlee.printStackTrace();
             }
         }
