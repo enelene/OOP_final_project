@@ -1,5 +1,5 @@
 </html>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="com.example.quizwebsite.quizManager.Attempt" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.example.quizwebsite.quizManager.Quiz" %>
@@ -17,22 +17,26 @@
             padding: 20px;
             background-color: #f0f0f0;
         }
+
         .container {
             max-width: 800px;
             margin: 0 auto;
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+
         h1, h2 {
             color: #424874;
             border-bottom: 2px solid #424874;
             padding-bottom: 10px;
         }
+
         p {
             margin-bottom: 10px;
         }
+
         a, button {
             display: inline-block;
             background-color: #424874;
@@ -46,23 +50,28 @@
             margin-right: 10px;
             margin-bottom: 10px;
         }
+
         a:hover, button:hover {
             background-color: #313759;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
         }
+
         th, td {
             border: 1px solid #ddd;
             padding: 8px;
             text-align: left;
         }
+
         th {
             background-color: #f4eeff;
             color: #424874;
         }
+
         tr:nth-child(even) {
             background-color: #f9f9f9;
         }
@@ -71,17 +80,21 @@
 <body>
 <div class="container">
     <%
-        Quiz quiz = ((Quiz)request.getAttribute("quiz"));
-        UserManager um  = (UserManager)application.getAttribute("userManager");
+        Quiz quiz = ((Quiz) request.getAttribute("quiz"));
+        UserManager um = (UserManager) application.getAttribute("userManager");
         String quizDescription = quiz.getDescription();
         String quizName = quiz.getName();
-        int avg = (int)request.getAttribute("averageScore");
-        int count = (int)request.getAttribute("attemptNum");
+        int avg = (int) request.getAttribute("averageScore");
+        int count = (int) request.getAttribute("attemptNum");
     %>
-    <h1>Quiz Summary: <%= quizName %></h1>
-    <p><strong>Description:</strong> <%= quizDescription %></p>
-    <p><strong>Number of Attempts:</strong> <%= count %></p>
-    <p><strong>Average Score:</strong> <%= avg %></p>
+    <h1>Quiz Summary: <%= quizName %>
+    </h1>
+    <p><strong>Description:</strong> <%= quizDescription %>
+    </p>
+    <p><strong>Number of Attempts:</strong> <%= count %>
+    </p>
+    <p><strong>Average Score:</strong> <%= avg %>
+    </p>
 
     <a href="PlayQuizServlet?quizId=<%= quiz.getId() %>">Take Quiz</a>
 
@@ -122,10 +135,20 @@
             if (attempts != null && !attempts.isEmpty()) {
                 for (Attempt attempt : attempts) {
         %>
+        <% String friendUsername = um.getUserById(attempt.getUserId()).getUsername();
+        %>
         <tr>
-            <td><%= um.getUserById(attempt.getUserId()).getUsername() %></td>
-            <td><%= attempt.getScore() %></td>
-            <td><%= attempt.getTime() %></td>
+            <td>
+                <form action="${pageContext.request.contextPath}/users" method="get">
+                    <input type="hidden" name="friendUsername" value="<%=friendUsername%>">
+                    <button type="submit"><%=um.getUserById(attempt.getUserId()).getUsername()%>
+                    </button>
+                </form>
+            </td>
+            <td><%= attempt.getScore() %>
+            </td>
+            <td><%= attempt.getTime() %>
+            </td>
         </tr>
         <%
             }

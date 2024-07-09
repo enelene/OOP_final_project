@@ -19,6 +19,7 @@
             font-family: "Roboto Light" !important;
             align-items: center !important;
         }
+
         .before-footer, .after-header {
             border: none !important;
             height: 1px !important;
@@ -33,11 +34,15 @@
     </div>
     <div class="grid-item nav">
         <a href="HomepageServlet?action=home" title="Home"><img src="icons/home-icon.png" alt="homepage icon"></a>
-        <a href="HomepageServlet?action=takeQuiz" title="Play a quiz"><img src="icons/play-icon.png" alt="play quiz icon"></a>
-        <a href="HomepageServlet?action=createQuiz" title="Create a quiz"><img src="icons/create-icon.png" alt="create a quiz icon"></a>
-        <a href="HomepageServlet?action=profile" title="Your Profile"><img src="icons/profile-icon.png" alt="profile page icon"></a>
+        <a href="HomepageServlet?action=takeQuiz" title="Play a quiz"><img src="icons/play-icon.png"
+                                                                           alt="play quiz icon"></a>
+        <a href="HomepageServlet?action=createQuiz" title="Create a quiz"><img src="icons/create-icon.png"
+                                                                               alt="create a quiz icon"></a>
+        <a href="HomepageServlet?action=profile" title="Your Profile"><img src="icons/profile-icon.png"
+                                                                           alt="profile page icon"></a>
         <a href="HomepageServlet?action=logout" title="Logout"><img src="icons/logout.png" alt="logout icon"></a>
     </div>
+
     <hr class="after-header">
     <div class="grid-item content">
         <h2 class="friend-requests-title">${user.getUsername()}'s Friend Requests</h2>
@@ -49,15 +54,23 @@
             <ul class="list-group w-100">
                 <% for (User sender : requests) { %>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <span><%= sender.getUsername() %></span>
+                    <form action="${pageContext.request.contextPath}/users" method="get" style="display:inline;">
+                        <input type="hidden" name="friendUsername" value="<%= sender.getUsername() %>">
+                        <button type="submit"
+                                style="background:none;border:none;color:#0000EE;cursor:pointer;padding:0;">
+                            <%= sender.getUsername() %>
+                        </button>
+                    </form>
                     <div>
-                        <form action="${pageContext.request.contextPath}/requests" method="post" style="display: inline;">
+                        <form action="${pageContext.request.contextPath}/requests" method="post"
+                              style="display: inline;">
                             <input type="hidden" name="method" value="accept">
                             <input type="hidden" name="from" value="requests">
                             <input type="hidden" name="friendUsername" value="<%= sender.getUsername() %>">
                             <button type="submit" class="btn btn-success btn-sm">Accept</button>
                         </form>
-                        <form action="${pageContext.request.contextPath}/requests" method="post" style="display: inline;">
+                        <form action="${pageContext.request.contextPath}/requests" method="post"
+                              style="display: inline;">
                             <input type="hidden" name="method" value="decline">
                             <input type="hidden" name="from" value="requests">
                             <input type="hidden" name="friendUsername" value="<%= sender.getUsername() %>">
