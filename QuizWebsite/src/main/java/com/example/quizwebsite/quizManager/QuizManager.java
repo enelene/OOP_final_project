@@ -23,7 +23,8 @@ public class QuizManager {
     private static final String SELECT_QUESTIONS_SQL = "SELECT * FROM questions WHERE quiz_id = ?";
     private static final String SELECT_OPTIONS_SQL = "SELECT * FROM question_options WHERE question_id = ?";
     private static final String SELECT_AVERAGE_SCORE_SQL = "SELECT AVG(score) AS average_score FROM attempts WHERE quiz_id = ?;";
-    private static final String SELECT_COUNT_SQL = "SELECT COUNT(*) FROM attempts WHERE quiz_id = ?;";
+    private static final String SELECT_COUNT_SQL_FOR_ONE_QUIZ = "SELECT COUNT(*) FROM attempts WHERE quiz_id = ?;";
+    private static final String SELECT_COUNT_SQL_FOR_ONE_USER = "SELECT COUNT(DISTINCT quiz_id) FROM attempts WHERE user_id = ?;";
 
     private final BasicDataSource dataSource;
 
@@ -385,6 +386,8 @@ public class QuizManager {
         }
     }
 
+
+
     public int getAverageScoreOfQuiz(int quizId){
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -419,8 +422,37 @@ public class QuizManager {
         PreparedStatement stmt = null;
         try{
             conn = dataSource.getConnection();
-            stmt = conn.prepareStatement(SELECT_COUNT_SQL);
+            stmt = conn.prepareStatement(SELECT_COUNT_SQL_FOR_ONE_QUIZ);
             stmt.setInt(1, quizId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+            }
+            catch (SQLException sqlee) {
+                sqlee.printStackTrace();
+            }
+        }
+        return 0;
+    }
+
+    public int getAttemptCountOfUser(int userId){
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try{
+            conn = dataSource.getConnection();
+            stmt = conn.prepareStatement(SELECT_COUNT_SQL_FOR_ONE_USER);
+            stmt.setInt(1, userId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return rs.getInt(1);

@@ -9,6 +9,8 @@
 
     int friendsNum = 0;
     int requestsNum = 0;
+    int quizzesTakenNum = 0;
+    int quizzesCreatedNum = 0;
 
     if (relationManager != null && user != null) {
         friendsNum = relationManager.getFriendsNum(user.getId());
@@ -47,11 +49,10 @@
             <button type="submit">Search</button>
         </form>
     </div> <%-- search bar    --%>
-    <div class="grid-item achievement-board">
-        <h3>Achievement Board</h3>
-        <h4>Total score:</h4> <!--overall score number-->
-        <h4>Quizzes taken:</h4> <!--number of quizzes taken-->
-        <h4>Quizzes created:</h4> <!--number of quizzes created-->
+    <div class="grid-item stats-board">
+        <h3>User's Statistics Board</h3>
+        <h4>Quizzes taken: <%= quizzesTakenNum%></h4> <!--number of quizzes taken-->
+        <h4>Quizzes created: <%= quizzesCreatedNum%></h4> <!--number of quizzes created-->
     </div>
     <div class="grid-item friends-board">
         <button class="icon-button" title="Friends"

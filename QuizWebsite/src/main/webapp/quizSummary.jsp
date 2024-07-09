@@ -3,6 +3,7 @@
 <%@ page import="com.example.quizwebsite.quizManager.Attempt" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.example.quizwebsite.quizManager.Quiz" %>
+<%@ page import="com.example.quizwebsite.userManager.UserManager" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -71,6 +72,7 @@
 <div class="container">
     <%
         Quiz quiz = ((Quiz)request.getAttribute("quiz"));
+        UserManager um  = (UserManager)application.getAttribute("userManager");
         String quizDescription = quiz.getDescription();
         String quizName = quiz.getName();
         int avg = (int)request.getAttribute("averageScore");
@@ -109,9 +111,7 @@
     <table>
         <thead>
         <tr>
-            <th>ID</th>
-            <th>Quiz ID</th>
-            <th>User ID</th>
+            <th>Username</th>
             <th>Score</th>
             <th>Time</th>
         </tr>
@@ -123,9 +123,7 @@
                 for (Attempt attempt : attempts) {
         %>
         <tr>
-            <td><%= attempt.getId() %></td>
-            <td><%= attempt.getQuizId() %></td>
-            <td><%= attempt.getUserId() %></td>
+            <td><%= um.getUserById(attempt.getUserId()).getUsername() %></td>
             <td><%= attempt.getScore() %></td>
             <td><%= attempt.getTime() %></td>
         </tr>

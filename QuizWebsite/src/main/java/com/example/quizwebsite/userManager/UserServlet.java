@@ -31,11 +31,16 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         UserManager um = (UserManager) getServletContext().getAttribute("userManager");
+        User user = (User) request.getSession().getAttribute("user");
         String friendUsername = request.getParameter("friendUsername");
         User friend = um.getUserByUsername(friendUsername);
         if (friend == null) {
             request.getRequestDispatcher("/usernameDoesNotExist.jsp").forward(request, response);
-        } else {
+        }
+        else if (friend.getId().equals(user.getId())) {
+            request.getRequestDispatcher("/HomepageServlet?action=profile").forward(request, response);
+        }
+        else {
             request.getRequestDispatcher("/viewOtherUser.jsp").forward(request, response);
         }
     }
