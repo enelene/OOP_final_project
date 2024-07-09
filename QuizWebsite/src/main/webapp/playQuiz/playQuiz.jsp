@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Enele
-  Date: 7/7/2024
-  Time: 3:10 PM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
@@ -58,6 +51,25 @@
     input[type="submit"]:hover {
       background-color: #313759;
     }
+    .question-image-container {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+    }
+
+    .question-image {
+      width: 400px; /* Reduced from 700px to 400px */
+      height: auto;
+      max-width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    @media (max-width: 768px) {
+      .question-image {
+        width: 90%; /* Slightly reduced for smaller screens */
+      }
+    }
   </style>
 </head>
 <body>
@@ -79,6 +91,13 @@
       <c:forEach var="question" items="${quiz.questions}" varStatus="status">
         <div class="question">
           <p><strong>Question ${status.index + 1}:</strong> ${question.text}</p>
+
+          <c:if test="${question.type == 'PICTURE_RESPONSE' && not empty question.imageUrl}">
+            <div class="question-image-container">
+              <img src="${question.imageUrl}" alt="Question Image" class="question-image">
+            </div>
+          </c:if>
+
           <div class="options">
             <c:choose>
               <c:when test="${question.type == 'MULTIPLE_CHOICE'}">
@@ -93,9 +112,9 @@
                 <input type="radio" name="question_${question.id}" value="false" id="false_${question.id}">
                 <label for="false_${question.id}">False</label><br>
               </c:when>
-              <c:otherwise>
-                <input type="text" name="question_${question.id}">
-              </c:otherwise>
+              <c:when test="${question.type == 'PICTURE_RESPONSE' || question.type == 'SINGLE_ANSWER'}">
+                <input type="text" name="question_${question.id}" class="form-control">
+              </c:when>
             </c:choose>
           </div>
         </div>

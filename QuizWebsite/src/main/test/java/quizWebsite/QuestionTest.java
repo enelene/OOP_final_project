@@ -3,35 +3,37 @@ package quizWebsite;
 import java.util.*;
 import com.example.quizwebsite.quizManager.Question;
 import com.example.quizwebsite.quizManager.QuestionType;
-import org.junit.Before;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
-import java.security.NoSuchAlgorithmException;
-import junit.framework.TestCase;
-public class QuestionTest extends TestCase {
+
+class QuestionTest {
 
     private Question question;
     private int quizId;
     private String text;
     private QuestionType type;
 
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         quizId = 1;
         text = "What is 2+2?";
         type = QuestionType.MULTIPLE_CHOICE;
-        question = new Question(quizId, text, type);
+        question = new Question(quizId, text, type, null);
     }
 
-    public void testConstructorAndGetters() {
+    @Test
+    void testConstructorAndGetters() {
         assertEquals(quizId, question.getQuizId());
         assertEquals(text, question.getText());
         assertEquals(type, question.getType());
         assertTrue(question.getOptions().isEmpty());
         assertTrue(question.getCorrectOptions().isEmpty());
+        assertNull(question.getImageUrl());
     }
 
-    public void testSetId() {
-        Question question1 = new Question(2,"test Question",QuestionType.MULTIPLE_CHOICE);
+    @Test
+    void testSetId() {
+        Question question1 = new Question(2, "test Question", QuestionType.MULTIPLE_CHOICE, null);
         question1.setId(5);
         assertEquals(5, question1.getId());
 
@@ -40,7 +42,9 @@ public class QuestionTest extends TestCase {
         });
         assertEquals("ID must be non-negative", exception.getMessage());
     }
-    public void testSetQuizId() {
+
+    @Test
+    void testSetQuizId() {
         question.setQuizId(2);
         assertEquals(2, question.getQuizId());
 
@@ -49,7 +53,9 @@ public class QuestionTest extends TestCase {
         });
         assertEquals("Quiz ID must be non-negative", exception.getMessage());
     }
-    public void testSetText() {
+
+    @Test
+    void testSetText() {
         question.setText("What is 3+3?");
         assertEquals("What is 3+3?", question.getText());
 
@@ -58,7 +64,9 @@ public class QuestionTest extends TestCase {
         });
         assertEquals("Question text cannot be null", exception.getMessage());
     }
-    public void testSetType() {
+
+    @Test
+    void testSetType() {
         question.setType(QuestionType.TRUE_FALSE);
         assertEquals(QuestionType.TRUE_FALSE, question.getType());
 
@@ -67,7 +75,9 @@ public class QuestionTest extends TestCase {
         });
         assertEquals("Question type cannot be null", exception.getMessage());
     }
-    public void testSetOptions() {
+
+    @Test
+    void testSetOptions() {
         List<String> options = Arrays.asList("3", "4");
         question.setOptions(options);
         assertEquals(options, question.getOptions());
@@ -77,7 +87,9 @@ public class QuestionTest extends TestCase {
         });
         assertEquals("Options list cannot be null", exception.getMessage());
     }
-    public void testSetCorrectOptions() {
+
+    @Test
+    void testSetCorrectOptions() {
         List<Boolean> correctOptions = Arrays.asList(false, true);
         question.setCorrectOptions(correctOptions);
         assertEquals(correctOptions, question.getCorrectOptions());
@@ -87,7 +99,9 @@ public class QuestionTest extends TestCase {
         });
         assertEquals("Correct options list cannot be null", exception.getMessage());
     }
-    public void testAddOption() {
+
+    @Test
+    void testAddOption() {
         question.addOption("3", false);
         question.addOption("4", true);
 
@@ -99,7 +113,9 @@ public class QuestionTest extends TestCase {
         });
         assertEquals("Option cannot be null", exception.getMessage());
     }
-    public void testClearOptions() {
+
+    @Test
+    void testClearOptions() {
         question.addOption("3", false);
         question.addOption("4", true);
 
@@ -107,39 +123,73 @@ public class QuestionTest extends TestCase {
         assertTrue(question.getOptions().isEmpty());
         assertTrue(question.getCorrectOptions().isEmpty());
     }
-    public void testHasCorrectOption() {
+
+    @Test
+    void testHasCorrectOption() {
         assertFalse(question.hasCorrectOption());
 
         question.addOption("3", false);
         question.addOption("4", true);
         assertTrue(question.hasCorrectOption());
     }
-    public void testGetOptionCount() {
+
+    @Test
+    void testGetOptionCount() {
         assertEquals(0, question.getOptionCount());
 
         question.addOption("3", false);
         question.addOption("4", true);
         assertEquals(2, question.getOptionCount());
     }
-    public void testIsValid() {
-        Question multipleChoiceQuestion = new Question(1, "What is 2+2?", QuestionType.MULTIPLE_CHOICE);
+
+    @Test
+    void testIsValid() {
+        Question multipleChoiceQuestion = new Question(1, "What is 2+2?", QuestionType.MULTIPLE_CHOICE, null);
         assertFalse(multipleChoiceQuestion.isValid());
 
         multipleChoiceQuestion.addOption("3", false);
         multipleChoiceQuestion.addOption("4", true);
         assertTrue(multipleChoiceQuestion.isValid());
 
-        Question trueFalseQuestion = new Question(1, "2+2=4", QuestionType.TRUE_FALSE);
+        Question trueFalseQuestion = new Question(1, "2+2=4", QuestionType.TRUE_FALSE, null);
         assertFalse(trueFalseQuestion.isValid());
 
         trueFalseQuestion.addOption("True", true);
         trueFalseQuestion.addOption("False", false);
         assertTrue(trueFalseQuestion.isValid());
 
-        Question singleAnswerQuestion = new Question(1, "What is the capital of France?", QuestionType.SINGLE_ANSWER);
+        Question singleAnswerQuestion = new Question(1, "What is the capital of France?", QuestionType.SINGLE_ANSWER, null);
         assertFalse(singleAnswerQuestion.isValid());
 
         singleAnswerQuestion.setCorrectAnswer("Paris");
         assertTrue(singleAnswerQuestion.isValid());
+
+        Question pictureResponseQuestion = new Question(1, "What is shown in this image?", QuestionType.PICTURE_RESPONSE, "http://example.com/image.jpg");
+        assertFalse(pictureResponseQuestion.isValid());
+
+        pictureResponseQuestion.setCorrectAnswer("Eiffel Tower");
+        assertTrue(pictureResponseQuestion.isValid());
+    }
+
+    @Test
+    void testPictureResponseQuestion() {
+        String imageUrl = "https://upload.wikimedia.org/wikipedia/commons/8/85/Tour_Eiffel_Wikimedia_Commons_%28cropped%29.jpg";
+        Question pictureQuestion = new Question(1, "What is shown in this image?", QuestionType.PICTURE_RESPONSE, imageUrl);
+
+        assertEquals(QuestionType.PICTURE_RESPONSE, pictureQuestion.getType());
+        assertEquals(imageUrl, pictureQuestion.getImageUrl());
+
+        pictureQuestion.setCorrectAnswer("Eiffel Tower");
+        assertTrue(pictureQuestion.isValid());
+
+        pictureQuestion.setImageUrl(null);
+        assertFalse(pictureQuestion.isValid());
+    }
+
+    @Test
+    void testSetImageUrl() {
+        String imageUrl = "http://example.com/new-image.jpg";
+        question.setImageUrl(imageUrl);
+        assertEquals(imageUrl, question.getImageUrl());
     }
 }
