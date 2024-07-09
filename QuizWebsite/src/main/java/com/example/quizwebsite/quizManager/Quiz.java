@@ -292,6 +292,10 @@ public class Quiz {
 /**
  * Enumeration of quiz categories.
  */
+<<<<<<< HEAD
+=======
+//from @ana to @elene i deleted public enum
+>>>>>>> 5e3babeeaf00a22dd13e337f4e1d88637d2064f6
 enum QuizCategory {
     MATH, SCIENCE, HISTORY, LITERATURE, GENERAL_KNOWLEDGE
     // Add more categories as needed

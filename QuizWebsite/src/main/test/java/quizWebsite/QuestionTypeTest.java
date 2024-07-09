@@ -1,11 +1,11 @@
 package quizWebsite;
 import com.example.quizwebsite.quizManager.QuestionType;
+import junit.framework.TestCase;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class QuestionTypeTest {
+public class QuestionTypeTest extends TestCase {
 
-    @Test
     public void testEnumValues() {
         assertEquals(4, QuestionType.values().length);
         assertArrayEquals(new QuestionType[] {
@@ -16,7 +16,6 @@ public class QuestionTypeTest {
         }, QuestionType.values());
     }
 
-    @Test
     public void testEnumValuesExist() {
         assertNotNull(QuestionType.valueOf("MULTIPLE_CHOICE"));
         assertNotNull(QuestionType.valueOf("SINGLE_ANSWER"));
