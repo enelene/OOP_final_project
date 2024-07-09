@@ -29,30 +29,24 @@
         <h1>Quiz Website</h1>
     </div>
     <div class="grid-item nav">
-        <a href="HomepageServlet?action=home" title="Home"><img src="icons/home-icon.png" alt="homepage icon"></a>
-        <a href="HomepageServlet?action=takeQuiz" title="Play a quiz"><img src="icons/play-icon.png"
-                                                                           alt="play quiz icon"></a>
-        <a href="HomepageServlet?action=createQuiz" title="Create a quiz"><img src="icons/create-icon.png"
-                                                                               alt="create a quiz icon"></a>
-        <a href="HomepageServlet?action=profile" title="Your Profile"><img src="icons/profile-icon.png"
-                                                                           alt="profile page icon"></a>
-        <!--you need to add correct link-->
-        <a href="HomepageServlet?action=logout" title="Logout"><img src="icons/logout.png" alt="logout icon"></a>
+        <a href="HomepageServlet?action=home" title="Home"><img src="${pageContext.request.contextPath}/icons/home-icon.png" alt="homepage icon"></a>
+        <a href="HomepageServlet?action=takeQuiz" title="Play a quiz"><img src="${pageContext.request.contextPath}/icons/play-icon.png" alt="play quiz icon"></a>
+        <a href="HomepageServlet?action=createQuiz" title="Create a quiz"><img src="${pageContext.request.contextPath}/icons/create-icon.png" alt="create a quiz icon"></a>
+        <a href="HomepageServlet?action=profile" title="Your Profile"><img src="${pageContext.request.contextPath}/icons/profile-icon.png" alt="profile page icon"></a>
+        <a href="HomepageServlet?action=logout" title="Logout"><img src="${pageContext.request.contextPath}/icons/logout.png" alt="logout icon"></a>
     </div>
     <hr class="after-header">
     <div class="grid-item content">
         <h2> ${user.getUsername()}'s Profile</h2>
     </div>
-
     <div class="grid-item search-friend">
         <h3>Search for a Friend</h3>
         <form action="${pageContext.request.contextPath}/users" method="get">
-            <label for="searchUsername">Username:</label>
-            <input type="text" id="searchUsername" name="friendId" required>
+            <label for="searchUsername">Username:</label>dow
+            <input type="text" id="searchUsername" name="friendUsername" required>
             <button type="submit">Search</button>
         </form>
     </div> <%-- search bar    --%>
-
     <div class="grid-item achievement-board">
         <h3>Achievement Board</h3>
         <h4>Total score:</h4> <!--overall score number-->

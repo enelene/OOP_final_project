@@ -22,7 +22,7 @@
                 'footer';
     }
     .header {
-      max-height: 80px;
+      height: 80px; !important;
       display: flex;
       justify-content: space-between;
       padding-left: 12px;

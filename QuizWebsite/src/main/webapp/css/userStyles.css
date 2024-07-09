@@ -1,7 +1,7 @@
 /*userpage*/
 
 body {
-    font-family: sans-serif;
+    font-family: sans-serif; !important;
     background-color: #f4eeff;
     margin: 0;
     padding: 0;
@@ -14,11 +14,12 @@ body {
     font-family: "Roboto Light"; !important
     font-weight: lighter;
     align-items: center;
+    height: auto;
 }
 h1 {
-    text-align: center;
-    color: #fff;
-    font-size: 19px;  /*changed*/
+    text-align: center; !important;
+    color: #fff; !important;
+    font-size: 19px;  /*changed*/ !important;
 }
 .nav {
     display: flex;
@@ -36,10 +37,10 @@ img {
     width:  50px;
 }
 .after-header{
-    grid-area: hr1;
-    height: 2px;
-    color: #424874;
-    width: 100vw;
+    grid-area: hr1; !important;
+    height: 2px; !important;
+    color: #424874; !important;
+    width: 100vw; !important;
 }
 .grid-container {
     width: 100vw;
@@ -77,9 +78,44 @@ footer {
     align-self: center;
     grid-area: footer;
 }
+
 .before-footer {
-    grid-area: hr2;
-    height: 2px;
-    color: #424874;
-    width: 100vw;
+    grid-area: hr2; !important;
+    height: 2px; !important;
+    color: #424874; !important;
+    width: 100vw; !important;
+}
+
+.friend-requests-title {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #424874; /* Adjust color as needed */
+}
+
+.requests-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100px; /* Adjust as needed */
+}
+
+.no-requests-message {
+    text-align: center;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.no-friends-message {
+    text-align: center;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.list-group {
+    width: 100%;
+    max-width: 600px; /* Adjust as needed */
 }

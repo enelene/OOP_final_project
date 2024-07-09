@@ -7,9 +7,9 @@
 <html>
 <%
     User user = (User) request.getSession().getAttribute("user");
-    Integer friendId = Integer.parseInt(request.getParameter("friendId"));
+    String friendUsername = request.getParameter("friendUsername");
     UserManager um = (UserManager) application.getAttribute("userManager");
-    User friend = um.getUserById(friendId);
+    User friend = um.getUserByUsername(friendUsername);
     RelationManager rm = (RelationManager) application.getAttribute("relationManager");
     RelationType r = rm.getRelation(friend.getId(), user.getId());
 
@@ -47,7 +47,7 @@
 <p><%= statusText %></p>
 <form action="${pageContext.request.contextPath}<%= formAction %>" method="post">
     <input type="hidden" name="method" value="<%=methodName%>">
-    <input type="hidden" name="friendId" value="<%= friend.getUsername() %>">
+    <input type="hidden" name="friendUsername" value="<%= friend.getUsername() %>">
     <input type="hidden" name="from" value="users">
     <button type="submit" <%= (r == RelationType.REQUEST_FROM_USER_2) ? "disabled" : "" %>>
         <%= buttonText %>

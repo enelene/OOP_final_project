@@ -27,12 +27,11 @@
         }
         .header {
             grid-area: header;
-            max-height: 80px;
+            height: 80px; !important;
             display: flex;
             justify-content: space-between;
             padding-left: 12px;
             padding-right: 12px;
-            background-color: #484c74;
             color: white;
         }
         .content {

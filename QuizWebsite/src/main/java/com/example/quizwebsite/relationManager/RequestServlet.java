@@ -43,9 +43,9 @@ public class RequestServlet extends HttpServlet {
         RelationManager rm = (RelationManager) getServletContext().getAttribute("relationManager");
         UserManager um = (UserManager) getServletContext().getAttribute("userManager");
         User user = (User) request.getSession().getAttribute("user");
-        Integer friendId = Integer.parseInt(request.getParameter("friendId"));
-        String friendUsername = um.getUserById(friendId).getUsername();
-        rm.deleteRequest(user.getId(), friendId);
+        String friendUsername = request.getParameter("friendUsername");
+        User friend = um.getUserByUsername(friendUsername);
+        rm.deleteRequest(user.getId(), friend.getId());
 
         String cameFrom = request.getParameter("from");
         if (cameFrom.equals("requests")) {
@@ -59,9 +59,10 @@ public class RequestServlet extends HttpServlet {
         RelationManager rm = (RelationManager) getServletContext().getAttribute("relationManager");
         UserManager um = (UserManager) getServletContext().getAttribute("userManager");
         User user = (User) request.getSession().getAttribute("user");
-        Integer friendId = Integer.parseInt(request.getParameter("friendId"));
+        String friendUsername = request.getParameter("friendUsername");
+        User friend = um.getUserByUsername(friendUsername);
 
-        rm.addFriend(user.getId(), friendId);
+        rm.addFriend(user.getId(), friend.getId());
 
         String cameFrom = request.getParameter("from");
         if (cameFrom.equals("requests")) {
@@ -73,7 +74,7 @@ public class RequestServlet extends HttpServlet {
                     return "GET";
                 }
             };
-            request.getRequestDispatcher("/users?friendId=" + friendId).forward(requestWrapper, response);
+            request.getRequestDispatcher("/users?friendUsername=" + friendUsername).forward(requestWrapper, response);
         }
     }
 }

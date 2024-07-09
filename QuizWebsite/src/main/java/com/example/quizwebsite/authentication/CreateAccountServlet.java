@@ -26,8 +26,6 @@ public class CreateAccountServlet extends HttpServlet {
     // Endpoint for viewing user's page
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        UserManager um = (UserManager) getServletContext().getAttribute("userManager");
-        Integer friendId = Integer.parseInt(request.getParameter("friendId"));
         request.getRequestDispatcher("/viewOtherUser.jsp").forward(request, response);
     }
 

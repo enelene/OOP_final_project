@@ -1,6 +1,7 @@
 package com.example.quizwebsite.relationManager;
 
 import com.example.quizwebsite.userManager.User;
+import com.example.quizwebsite.userManager.UserManager;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -61,10 +62,11 @@ public class FriendServlet extends HttpServlet {
      */
     private void doSendRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RelationManager rm = (RelationManager) getServletContext().getAttribute("relationManager");
+        UserManager um = (UserManager) getServletContext().getAttribute("userManager");
         User user = (User) request.getSession().getAttribute("user");
-        Integer friendId = Integer.parseInt(request.getParameter("friendId"));
-
-        rm.sendRequest(user.getId(), friendId);
+        String friendUsername = request.getParameter("friendUsername");
+        User friend = um.getUserByUsername(friendUsername);
+        rm.sendRequest(user.getId(), friend.getId());
 
         HttpServletRequestWrapper requestWrapper = new HttpServletRequestWrapper(request) {
             public String getMethod() {
@@ -72,7 +74,7 @@ public class FriendServlet extends HttpServlet {
             }
         };
 
-        request.getRequestDispatcher("/users?friendId=" + friendId).forward(requestWrapper, response);
+        request.getRequestDispatcher("/users?friendUsername=" + friendUsername).forward(requestWrapper, response);
 
     }
 
@@ -86,10 +88,12 @@ public class FriendServlet extends HttpServlet {
      */
     protected void doUnfriend(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         RelationManager rm = (RelationManager) getServletContext().getAttribute("relationManager");
+        UserManager um = (UserManager) getServletContext().getAttribute("userManager");
         User user = (User) request.getSession().getAttribute("user");
-        Integer friendId = Integer.parseInt(request.getParameter("friendId"));
+        String friendUsername = request.getParameter("friendUsername");
+        User friend = um.getUserByUsername(friendUsername);
 
-        rm.removeFriend(user.getId(), friendId);
+        rm.removeFriend(user.getId(), friend.getId());
 
         String cameFrom = request.getParameter("from");
         if (cameFrom.equals("friends")) {
@@ -101,7 +105,7 @@ public class FriendServlet extends HttpServlet {
                     return "GET";
                 }
             };
-            request.getRequestDispatcher("/users?friendId=" + friendId).forward(requestWrapper, response);
+            request.getRequestDispatcher("/users?friendUsername=" + friendUsername).forward(requestWrapper, response);
         }
     }
 }
