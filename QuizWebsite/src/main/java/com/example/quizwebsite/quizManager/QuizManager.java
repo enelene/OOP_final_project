@@ -314,32 +314,6 @@ public class QuizManager {
         }
     }
 
-    public List<Quiz> getAllQuizzes() {
-        List<Quiz> quizzes = new ArrayList<>();
-        String sql = "SELECT * FROM quizzes";
-        try (Connection conn = dataSource.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                QuizCategory category = QuizCategory.valueOf(rs.getString("category"));
-                Quiz quiz = new Quiz( rs.getInt("id"),
-                        rs.getString("name"),
-                        rs.getString("description"),
-                        category,
-                        rs.getBoolean("display_on_single_page"),
-                        rs.getBoolean("display_in_random_order"),
-                        rs.getBoolean("allow_practice_mode"),
-                        rs.getBoolean("correct_immediately")
-                        //rs.getString("username")
-                );
-                quizzes.add(quiz);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return quizzes;
-    }
-
 
     public List<Attempt> getAttemptsByQuizId(int quizId, boolean sortByScore, boolean sortByTime, boolean ascending, int intervalInHours, int userId) {
         List<Attempt> attempts = new ArrayList<>();
@@ -501,6 +475,68 @@ public class QuizManager {
                 sqlee.printStackTrace();
             }
         }
+    }
+
+    /**
+     * returns list of quizzes which was created by this user
+     * @param username
+     * @return List<Quiz>
+     */
+    public List<Quiz> getQuizzesByUser(String username) {
+        List<Quiz> quizzes = new ArrayList<>();
+        String sql = "SELECT * FROM quizzes WHERE username = ?";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    QuizCategory category = QuizCategory.valueOf(rs.getString("category"));
+                    Quiz quiz = new Quiz(
+                            rs.getInt("id"),
+                            rs.getString("name"),
+                            rs.getString("description"),
+                            category,
+                            rs.getBoolean("display_on_single_page"),
+                            rs.getBoolean("display_in_random_order"),
+                            rs.getBoolean("allow_practice_mode"),
+                            rs.getBoolean("correct_immediately")
+                    );
+                    quizzes.add(quiz);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return quizzes;
+    }
+
+    /**
+     * returns list of all quizzes
+     * @return List<Quiz>
+     */
+    public List<Quiz> getAllQuizzes() {
+        List<Quiz> quizzes = new ArrayList<>();
+        String sql = "SELECT * FROM quizzes";
+        try (Connection conn = dataSource.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                QuizCategory category = QuizCategory.valueOf(rs.getString("category"));
+                Quiz quiz = new Quiz( rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("description"),
+                        category,
+                        rs.getBoolean("display_on_single_page"),
+                        rs.getBoolean("display_in_random_order"),
+                        rs.getBoolean("allow_practice_mode"),
+                        rs.getBoolean("correct_immediately")
+                );
+                quizzes.add(quiz);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return quizzes;
     }
 
 

@@ -1,0 +1,159 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+.grid-container {
+    display: grid;
+    grid-template-areas:
+                'header header header'
+                'notes content quizzes';
+    grid-template-columns: 300px 1fr 300px;
+    grid-template-rows: auto 1fr;
+    height: 100vh;
+    overflow: hidden;
+}
+.header {
+    grid-area: header;
+    height: 80px; !important;
+    display: flex;
+    justify-content: space-between;
+    padding-left: 12px;
+    padding-right: 12px;
+    color: white;
+}
+.content {
+    grid-area: content;
+    padding: 20px;
+    overflow-y: auto;
+    background-color: #f8f0ff;
+}
+.notes-section {
+    grid-area: notes;
+    background-color: #f0f0f0;
+    padding: 20px;
+    box-shadow: 2px 0 4px rgba(0,0,0,0.1);
+    overflow-y: auto;
+}
+.notes-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+.notes-title {
+    font-size: 1.2em;
+    color: #484c74;
+}
+.send-note-btn {
+    background-color: #484c74;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.note-list {
+    overflow-y: auto;
+}
+.note-item {
+    background-color: white;
+    border-left: 4px solid #484c74;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 4px;
+}
+.note-sender {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #484c74;
+}
+.note-preview {
+    color: #666;
+    font-size: 0.9em;
+}
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+}
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 8px;
+}
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+.note-form input,
+.note-form textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+.note-form button {
+    background-color: #484c74;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.quizzes-section {
+    grid-area: quizzes;
+    background-color: #f0f0f0;
+    padding: 20px;
+    box-shadow: -2px 0 4px rgba(0,0,0,0.1);
+    overflow-y: auto;
+}
+.quizzes-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+.quizzes-title {
+    font-size: 1.2em;
+    color: #484c74;
+}
+.quiz-list {
+    overflow-y: auto;
+}
+.quiz-item {
+    background-color: white;
+    border-left: 4px solid #484c74;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 4px;
+}
+.quiz-name {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #484c74;
+}
+.quiz-description {
+    color: #666;
+    font-size: 0.9em;
+}

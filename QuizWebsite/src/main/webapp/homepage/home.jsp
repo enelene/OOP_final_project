@@ -1,3 +1,5 @@
+<%@ page import="com.example.quizwebsite.quizManager.Quiz" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
@@ -8,131 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Page</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/userStyles.css">
-    <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-        }
-        .grid-container {
-            display: grid;
-            grid-template-areas:
-                'header header'
-                'notes content';
-            grid-template-columns: 300px 1fr;
-            grid-template-rows: auto 1fr;
-            height: 100vh;
-            overflow: hidden;
-        }
-        .header {
-            grid-area: header;
-            height: 80px; !important;
-            display: flex;
-            justify-content: space-between;
-            padding-left: 12px;
-            padding-right: 12px;
-            color: white;
-        }
-        .content {
-            grid-area: content;
-            padding: 20px;
-            overflow-y: auto;
-            background-color: #f8f0ff;
-        }
-        .notes-section {
-            grid-area: notes;
-            background-color: #f0f0f0;
-            padding: 20px;
-            box-shadow: 2px 0 4px rgba(0,0,0,0.1);
-            overflow-y: auto;
-        }
-        .notes-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        .notes-title {
-            font-size: 1.2em;
-            color: #484c74;
-        }
-        .send-note-btn {
-            background-color: #484c74;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .note-list {
-            overflow-y: auto;
-        }
-        .note-item {
-            background-color: white;
-            border-left: 4px solid #484c74;
-            margin-bottom: 10px;
-            padding: 10px;
-            border-radius: 4px;
-        }
-        .note-sender {
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: #484c74;
-        }
-        .note-preview {
-            color: #666;
-            font-size: 0.9em;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.4);
-        }
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 500px;
-            border-radius: 8px;
-        }
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        .note-form input,
-        .note-form textarea {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        .note-form button {
-            background-color: #484c74;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/homepageStyles.css">
 </head>
 <body>
 <div class="grid-container">
@@ -170,6 +48,30 @@
         <c:if test="${not empty noteMessage}">
             <p>${noteMessage}</p>
         </c:if>
+    </div>
+    <div class="quizzes-section">
+        <div class="quizzes-header">
+            <span class="quizzes-title">Your Quizzes</span>
+        </div>
+        <div class="quiz-list">
+            <%
+                List<Quiz> quizzes = (List<Quiz>) request.getAttribute("userQuizzes");
+                if (quizzes != null && !quizzes.isEmpty()) {
+                    for (Quiz quiz : quizzes) {
+            %>
+            <div class="quiz-item">
+                <h3><%= quiz.getName() %></h3>
+                <a href="${pageContext.request.contextPath}/aboutQuiz?quizId=<%= quiz.getId() %>">About Quiz</a>
+            </div>
+            <%
+                }
+            } else {
+            %>
+            <p>You don't have any quizzes yet.</p>
+            <%
+                }
+            %>
+        </div>
     </div>
 </div>
 

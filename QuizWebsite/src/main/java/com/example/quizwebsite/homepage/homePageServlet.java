@@ -1,5 +1,7 @@
 package com.example.quizwebsite.homepage;
 
+import com.example.quizwebsite.quizManager.Quiz;
+import com.example.quizwebsite.quizManager.QuizManager;
 import com.example.quizwebsite.userManager.User;
 import com.example.quizwebsite.notes.Note;
 import com.example.quizwebsite.notes.NoteService;
@@ -18,6 +20,7 @@ import java.util.List;
 @WebServlet("/HomepageServlet")
 public class homePageServlet extends HttpServlet {
     private NoteService noteService;
+    private QuizManager quizManager;
 
     public homePageServlet() {
         super();
@@ -32,6 +35,7 @@ public class homePageServlet extends HttpServlet {
         }
         NoteDAO noteDAO = new NoteDAO(dataSource);
         this.noteService = new NoteService(noteDAO);
+        this.quizManager = new QuizManager(dataSource);
     }
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
@@ -63,6 +67,7 @@ public class homePageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Get the action parameter from the request
         HttpSession session = request.getSession();
+        //QuizManager quizManager = (QuizManager) getServletContext().getAttribute("quizManager");
         User user = (User) session.getAttribute("user");
         String action = request.getParameter("action");
 
@@ -76,6 +81,10 @@ public class homePageServlet extends HttpServlet {
                 List<Note> recentNotes = noteService.getNotesForUser(user.getUsername(), 1, 5);
                 System.out.println("Recent notes for " + user.getUsername() + ": " + recentNotes); // Debug print
                 request.setAttribute("recentNotes", recentNotes);
+
+                List<Quiz> userQuizzes = quizManager.getQuizzesByUser(user.getUsername());
+                System.out.println("Quizzes for user" + userQuizzes);
+                request.setAttribute("userQuizzes", userQuizzes);
 
                 // Add this line to include any note sending messages
                 request.setAttribute("noteMessage", session.getAttribute("noteMessage"));
