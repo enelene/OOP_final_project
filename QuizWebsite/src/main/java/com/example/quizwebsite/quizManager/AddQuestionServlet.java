@@ -80,8 +80,9 @@ public class AddQuestionServlet extends HttpServlet {
         int quizIdInt = Integer.parseInt(getRequiredParameter(request, "quizId"));
         String questionText = getRequiredParameter(request, "questionText");
         QuestionType questionType = QuestionType.valueOf(getRequiredParameter(request, "questionType"));
+        String imageUrl = request.getParameter("imageUrl"); // New parameter for image URL
 
-        Question question = new Question(quizIdInt, questionText, questionType);
+        Question question = new Question(quizIdInt, questionText, questionType, imageUrl);
 
         switch (questionType) {
             case MULTIPLE_CHOICE:
@@ -93,11 +94,20 @@ public class AddQuestionServlet extends HttpServlet {
             case SINGLE_ANSWER:
                 handleSingleAnswerQuestion(request, question);
                 break;
+            case PICTURE_RESPONSE:
+                handlePictureResponseQuestion(request, question);
+                break;
             default:
                 throw new IllegalArgumentException("Unsupported question type: " + questionType);
         }
 
         return question;
+    }
+
+    private void handlePictureResponseQuestion(HttpServletRequest request, Question question) {
+        String correctAnswer = getRequiredParameter(request, "correctAnswer");
+        question.setCorrectAnswer(correctAnswer);
+        LOGGER.info("Setting Picture-Response correct answer: " + correctAnswer);
     }
 
     /**

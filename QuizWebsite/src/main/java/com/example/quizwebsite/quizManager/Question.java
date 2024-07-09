@@ -17,7 +17,7 @@ public class Question {
     private static final String OPTIONS_ERROR_MESSAGE = "Options list cannot be null";
     private static final String CORRECT_OPTIONS_ERROR_MESSAGE = "Correct options list cannot be null";
     private static final String OPTION_ERROR_MESSAGE = "Option cannot be null";
-
+    private String imageUrl;
     private int id;
     private int quizId;
     private String text;
@@ -35,10 +35,11 @@ public class Question {
      * @throws IllegalArgumentException if quizId is negative
      * @throws NullPointerException     if text or type is null
      */
-    public Question(int quizId, String text, QuestionType type) {
+    public Question(int quizId, String text, QuestionType type, String imageUrl) {
         setQuizId(quizId);
         setText(text);
         setType(type);
+        setImageUrl(imageUrl);
         this.options = new ArrayList<>();
         this.correctOptions = new ArrayList<>();
     }
@@ -250,8 +251,20 @@ public class Question {
                 return getOptionCount() == 2 && hasCorrectOption();
             case SINGLE_ANSWER:
                 return correctAnswer != null && !correctAnswer.trim().isEmpty();
+            case PICTURE_RESPONSE:
+                return correctAnswer != null && !correctAnswer.trim().isEmpty() &&
+                        (type != QuestionType.PICTURE_RESPONSE || (imageUrl != null && !imageUrl.trim().isEmpty()));
             default:
                 return false;
         }
+    }
+
+    // Add getter and setter for imageUrl
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

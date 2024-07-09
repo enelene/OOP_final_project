@@ -40,7 +40,15 @@
                 <option value="MULTIPLE_CHOICE">Multiple Choice</option>
                 <option value="TRUE_FALSE">True/False</option>
                 <option value="SINGLE_ANSWER">Short Answer</option>
+                <option value="PICTURE_RESPONSE">Picture-Response</option>
             </select>
+        </div>
+
+        <div id="imageUrlField" style="display:none;">
+            <div class="form-group">
+                <label for="imageUrl">Image URL:</label>
+                <input type="url" class="form-control" id="imageUrl" name="imageUrl">
+            </div>
         </div>
 
         <div id="answerOptions">
@@ -59,6 +67,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         const questionType = document.getElementById('questionType');
         const answerOptions = document.getElementById('answerOptions');
+        const imageUrlField = document.getElementById('imageUrlField');
 
         function updateAnswerOptions() {
             switch(questionType.value) {
@@ -88,6 +97,13 @@
                         '</div>';
                     break;
                 case 'SINGLE_ANSWER':
+                    answerOptions.innerHTML = '<div class="form-group">' +
+                        '<label for="correctAnswer">Correct Answer:</label>' +
+                        '<input type="text" class="form-control" id="correctAnswer" name="correctAnswer" required>' +
+                        '</div>';
+                    break;
+                case 'PICTURE_RESPONSE':
+                    imageUrlField.style.display = 'block';
                     answerOptions.innerHTML = '<div class="form-group">' +
                         '<label for="correctAnswer">Correct Answer:</label>' +
                         '<input type="text" class="form-control" id="correctAnswer" name="correctAnswer" required>' +

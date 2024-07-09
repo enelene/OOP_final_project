@@ -44,11 +44,20 @@
             sb.append("<p class='card-text'><strong>Correct Answer:</strong> ")
                     .append(correctAnswer != null ? correctAnswer : "Not set")
                     .append("</p>");
-        } else if ("SINGLE_ANSWER".equals(questionType)) {
+        } else if ("SINGLE_ANSWER".equals(questionType) || "PICTURE_RESPONSE".equals(questionType)) {
             String correctAnswer = question.getCorrectAnswer();
             sb.append("<p class='card-text'><strong>Correct Answer:</strong> ")
                     .append(correctAnswer != null ? correctAnswer : "Not set")
                     .append("</p>");
+
+            if ("PICTURE_RESPONSE".equals(questionType)) {
+                String imageUrl = question.getImageUrl();
+                if (imageUrl != null && !imageUrl.isEmpty()) {
+                    sb.append("<img src='").append(imageUrl).append("' alt='Question Image' class='img-fluid mb-3' style='max-width: 100%; height: auto;'>");
+                } else {
+                    sb.append("<p class='text-warning'>No image provided for this picture-response question.</p>");
+                }
+            }
         }
 
         sb.append("</div></div>");

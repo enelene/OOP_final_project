@@ -95,10 +95,28 @@ public class QuizManager {
                 return saveTrueFalseQuestion(question);
             case SINGLE_ANSWER:
                 return saveSingleAnswerQuestion(question);
+            case PICTURE_RESPONSE:
+                return savePictureResponseQuestion(question);
             default:
                 throw new IllegalArgumentException("Unsupported question type: " + question.getType());
         }
     }
+
+    private boolean savePictureResponseQuestion(Question question) throws SQLException {
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(
+                     "INSERT INTO questions (quiz_id, question_text, question_type, correct_answer, image_url) VALUES (?, ?, ?, ?, ?)",
+                     Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setInt(1, question.getQuizId());
+            stmt.setString(2, question.getText());
+            stmt.setString(3, question.getType().name());
+            stmt.setString(4, question.getCorrectAnswer());
+            stmt.setString(5, question.getImageUrl());
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        }
+    }
+
 
     /**
      * Saves a multiple-choice question to the database.
@@ -276,7 +294,8 @@ public class QuizManager {
         Question question = new Question(
                 rs.getInt("quiz_id"),
                 rs.getString("question_text"),
-                QuestionType.valueOf(rs.getString("question_type"))
+                QuestionType.valueOf(rs.getString("question_type")),
+                rs.getString("image_url")
         );
         question.setId(rs.getInt("id"));
         question.setCorrectAnswer(rs.getString("correct_answer"));
