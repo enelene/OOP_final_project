@@ -2,10 +2,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 -->
 <%@ page import="com.example.quizwebsite.relationManager.RelationManager" %>
+<%@ page import="com.example.quizwebsite.quizManager.QuizManager" %>
 <%@ page import="com.example.quizwebsite.userManager.User" %>
 <%
     User user = (User) session.getAttribute("user");
     RelationManager relationManager = (RelationManager) application.getAttribute("relationManager");
+    QuizManager quizManager = (QuizManager) application.getAttribute("quizManager");
 
     int friendsNum = 0;
     int requestsNum = 0;
@@ -15,6 +17,8 @@
     if (relationManager != null && user != null) {
         friendsNum = relationManager.getFriendsNum(user.getId());
         requestsNum = relationManager.getRequestsNum(user.getId());
+        quizzesCreatedNum = (quizManager.getQuizzesByUser(user.getUsername())).size();
+        quizzesTakenNum = quizManager.getAttemptCountOfUser(user.getId());
     }
 %>
 <!DOCTYPE html>
