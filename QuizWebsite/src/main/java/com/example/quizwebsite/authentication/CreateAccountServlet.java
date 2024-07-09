@@ -27,18 +27,8 @@ public class CreateAccountServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         UserManager um = (UserManager) getServletContext().getAttribute("userManager");
-        String username = request.getParameter("user");
-        if(username == "" || username == null) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return;
-        }
-        User user = um.getUserByUsername(username);
-        if(user == null){
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            return;
-        }
-        request.setAttribute("viewingUser", user);
-        request.getRequestDispatcher("/viewUser.jsp").forward(request, response);
+        Integer friendId = Integer.parseInt(request.getParameter("friendId"));
+        request.getRequestDispatcher("/viewOtherUser.jsp").forward(request, response);
     }
 
     // Endpoint for creating a new user.

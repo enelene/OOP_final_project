@@ -1,6 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.util.List" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ page import="com.example.quizwebsite.userManager.User" %>
 <%@ page import="java.util.Set" %>
 <html>
@@ -24,8 +22,9 @@
         <li class="list-group-item d-flex justify-content-between align-items-center">
             <%= friend.getUsername() %>
             <form action="${pageContext.request.contextPath}/friends" method="post" style="margin: 0;">
-                <input type="hidden" name="method" value="delete">
-                <input type="hidden" name="friendName" value="<%= friend.getUsername() %>">
+                <input type="hidden" name="method" value="unfriend">
+                <input type="hidden" name="from" value="friends">
+                <input type="hidden" name="friendId" value="<%= friend.getUsername() %>">
                 <button type="submit" class="btn btn-danger btn-sm">Unfriend</button>
             </form>
         </li>

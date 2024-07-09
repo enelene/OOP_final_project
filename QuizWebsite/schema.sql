@@ -115,3 +115,13 @@ CREATE INDEX idx_timestamp ON notes (timestamp);
 # INSERT INTO notes (sender_username, recipient_username, message, timestamp, is_read) VALUES ('elene', 'ana', 'This is the first test note from Elene to Ana.', NOW() - INTERVAL 2 DAY, TRUE), ('ana', 'elene', 'Hi Elene, thanks for your note! This is a reply.', NOW() - INTERVAL 1 DAY, FALSE), ('elene', 'ana', 'Another test note to check multiple note display.', NOW(), FALSE);
 INSERT INTO notes (id, sender_username, recipient_username, message, timestamp, is_read) VALUES
     (1, 'AnaR', 'Elene', 'Hello Elene, thanks for sending friend request', '2024-07-09 02:36:52', 0);
+
+CREATE TABLE IF NOT EXISTS attempts (
+                                        id INT PRIMARY KEY AUTO_INCREMENT,
+                                        quiz_id INT NOT NULL,
+                                        user_id INT NOT NULL,
+                                        score INT NOT NULL,
+                                        time DATETIME NOT NULL,
+                                        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+                                        FOREIGN KEY (quiz_id) REFERENCES quizzes(id) ON DELETE CASCADE
+);

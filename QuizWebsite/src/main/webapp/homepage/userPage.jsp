@@ -43,6 +43,16 @@
     <div class="grid-item content">
         <h2> ${user.getUsername()}'s Profile</h2>
     </div>
+
+    <div class="grid-item search-friend">
+        <h3>Search for a Friend</h3>
+        <form action="${pageContext.request.contextPath}/users" method="get">
+            <label for="searchUsername">Username:</label>
+            <input type="text" id="searchUsername" name="friendId" required>
+            <button type="submit">Search</button>
+        </form>
+    </div> <%-- search bar    --%>
+
     <div class="grid-item achievement-board">
         <h3>Achievement Board</h3>
         <h4>Total score:</h4> <!--overall score number-->

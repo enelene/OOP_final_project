@@ -2,6 +2,7 @@ package com.example.quizwebsite.quizManager;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -17,9 +18,12 @@ public class QuizManager {
     private static final String INSERT_QUIZ_SQL = "INSERT INTO quizzes (name, description, category, display_on_single_page, display_in_random_order, allow_practice_mode, correct_immediately, username) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String INSERT_QUESTION_SQL = "INSERT INTO questions (quiz_id, question_text, question_type, correct_answer) VALUES (?, ?, ?, ?)";
     private static final String INSERT_OPTION_SQL = "INSERT INTO question_options (question_id, option_text, is_correct) VALUES (?, ?, ?)";
+    private static final String INSERT_ATTEMPT_SQL = "INSERT INTO attempts (quiz_id, user_id, score, time) VALUES (?, ?, ?, ?)";
     private static final String SELECT_QUIZ_SQL = "SELECT * FROM quizzes WHERE id = ?";
     private static final String SELECT_QUESTIONS_SQL = "SELECT * FROM questions WHERE quiz_id = ?";
     private static final String SELECT_OPTIONS_SQL = "SELECT * FROM question_options WHERE question_id = ?";
+    private static final String SELECT_AVERAGE_SCORE_SQL = "SELECT AVG(score) AS average_score FROM attempts WHERE quiz_id = ?;";
+    private static final String SELECT_COUNT_SQL = "SELECT COUNT(*) FROM attempts WHERE quiz_id = ?;";
 
     private final BasicDataSource dataSource;
 
@@ -333,5 +337,142 @@ public class QuizManager {
             e.printStackTrace();
         }
         return quizzes;
+    }
+
+
+    public List<Attempt> getAttemptsByQuizId(int quizId, boolean sortByScore, boolean sortByTime, boolean ascending, int intervalInHours, int userId) {
+        List<Attempt> attempts = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try {
+            conn = dataSource.getConnection();
+            StringBuilder queryBuilder = new StringBuilder("SELECT * FROM attempts WHERE quiz_id = ?");
+            if (userId > -1) {
+                queryBuilder.append(" AND user_id = ?");
+            }
+            if (intervalInHours > 0) {
+                queryBuilder.append(" AND time >= NOW() - INTERVAL ").append(intervalInHours).append(" HOUR");
+            }
+            if (sortByScore) {
+                queryBuilder.append(" ORDER BY score ").append(ascending ? "ASC;" : "DESC;");
+            } else if (sortByTime) {
+                queryBuilder.append(" ORDER BY time ").append(ascending ? "ASC;" : "DESC;");
+            }
+            stmt = conn.prepareStatement(queryBuilder.toString());
+            stmt.setInt(1, quizId);
+            if (userId > -1) {
+                stmt.setInt(2, userId);
+            }
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Attempt attempt = createAttemptFromResultSet(rs);
+                attempts.add(attempt);
+            }
+            return attempts;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+            } catch (SQLException sqlee) {
+                sqlee.printStackTrace();
+            }
+        }
+    }
+
+    public int getAverageScoreOfQuiz(int quizId){
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try{
+            conn = dataSource.getConnection();
+            stmt = conn.prepareStatement(SELECT_AVERAGE_SCORE_SQL);
+            stmt.setInt(1, quizId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+            }
+            catch (SQLException sqlee) {
+                sqlee.printStackTrace();
+            }
+        }
+        return 0;
+    }
+
+    public int getAttemptCountOfQuiz(int quizId){
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try{
+            conn = dataSource.getConnection();
+            stmt = conn.prepareStatement(SELECT_COUNT_SQL);
+            stmt.setInt(1, quizId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+            }
+            catch (SQLException sqlee) {
+                sqlee.printStackTrace();
+            }
+        }
+        return 0;
+    }
+
+    public void addAttempt(int quizId, int userId, int score, LocalDateTime time) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try{
+            conn = dataSource.getConnection();
+            pstmt = conn.prepareStatement(INSERT_ATTEMPT_SQL);
+            pstmt.setInt(1, quizId);
+            pstmt.setInt(2, userId);
+            pstmt.setInt(3, score);
+            pstmt.setTimestamp(4, Timestamp.valueOf(time));
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+                if (pstmt != null) {
+                    pstmt.close();
+                }
+            }
+            catch (SQLException sqlee) {
+                sqlee.printStackTrace();
+            }
+        }
+    }
+
+
+    private Attempt createAttemptFromResultSet(ResultSet rs) throws SQLException {
+        return new Attempt(rs.getInt(3), rs.getInt(2), rs.getInt(4), rs.getTimestamp(5).toLocalDateTime());
     }
 }

@@ -3,6 +3,8 @@ package com.example.quizwebsite.quizManager.playQuiz;
 import com.example.quizwebsite.quizManager.Quiz;
 import com.example.quizwebsite.quizManager.QuizManager;
 import com.example.quizwebsite.quizManager.Question;
+import com.example.quizwebsite.userManager.User;
+
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,7 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
+
 
 @WebServlet("/PlayQuizServlet")
 public class PlayQuizServlet extends HttpServlet {
@@ -85,9 +89,7 @@ public class PlayQuizServlet extends HttpServlet {
                     score++;
                 }
             }
-            //todo
-            // You might want to save this score to the database
-            // quizManager.saveQuizResult(userId, quizId, score);
+            quizManager.addAttempt(quizId, ((User)request.getSession().getAttribute("user")).getId(), score, LocalDateTime.now());
 
             request.setAttribute("quiz", quiz);
             request.setAttribute("score", score);

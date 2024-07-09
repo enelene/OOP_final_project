@@ -14,24 +14,17 @@ import java.util.Set;
 
 @WebServlet({"/requests"})
 public class RequestServlet extends HttpServlet {
-    //Sends request. Needs from_id and to_username as parameters.
 
+    // Responds to a request
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        if(request.getParameter("method").equals("delete")){
-            doDelete(request, response);
+        if(request.getParameter("method").equals("decline")){
+            doDecline(request, response);
             return;
         }
-        // aqac methodad rame unda hqondes jsps rom null ar gamoyves shemtxvevit
-        RelationManager rm = (RelationManager) getServletContext().getAttribute("relationManager");
-        UserManager um = (UserManager) getServletContext().getAttribute("userManager");
-        User user = (User) request.getSession().getAttribute("user");
-        String username = user.getUsername();
-
-//        int to_id = um.getUserByUsername(user).getId();
-//        rm.sendRequest(id, to_id);
-        //todo redirect to somewhere
-        response.getWriter().print("request sent");
+        if(request.getParameter("method").equals("accept")){
+            doAccept(request, response);
+        }
     }
 
     //get all users that sent particular user requests.
@@ -46,19 +39,41 @@ public class RequestServlet extends HttpServlet {
         request.getRequestDispatcher("/viewRequests.jsp").forward(request, response);
     }
     // deletes a request sent by sender to the user
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doDecline(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RelationManager rm = (RelationManager) getServletContext().getAttribute("relationManager");
         UserManager um = (UserManager) getServletContext().getAttribute("userManager");
         User user = (User) request.getSession().getAttribute("user");
-        String senderUsername = request.getParameter("senderUsername");
-        User sender = um.getUserByUsername(senderUsername);
-        rm.deleteRequest(user.getId(), sender.getId());
+        Integer friendId = Integer.parseInt(request.getParameter("friendId"));
+        String friendUsername = um.getUserById(friendId).getUsername();
+        rm.deleteRequest(user.getId(), friendId);
 
-        HttpServletRequestWrapper requestWrapper = new HttpServletRequestWrapper(request) {
-            public String getMethod(){
-                return "GET";
-            }
-        };
-        request.getRequestDispatcher("/requests").forward(requestWrapper, response);
+        String cameFrom = request.getParameter("from");
+        if (cameFrom.equals("requests")) {
+            doGet(request, response);
+        }
+        if (cameFrom.equals("users")) {
+            request.getRequestDispatcher("/users?searchUsername=" + friendUsername).forward(request, response);
+        }
+    }
+    protected void doAccept(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        RelationManager rm = (RelationManager) getServletContext().getAttribute("relationManager");
+        UserManager um = (UserManager) getServletContext().getAttribute("userManager");
+        User user = (User) request.getSession().getAttribute("user");
+        Integer friendId = Integer.parseInt(request.getParameter("friendId"));
+
+        rm.addFriend(user.getId(), friendId);
+
+        String cameFrom = request.getParameter("from");
+        if (cameFrom.equals("requests")) {
+            doGet(request, response);
+        }
+        if (cameFrom.equals("users")) {
+            HttpServletRequestWrapper requestWrapper = new HttpServletRequestWrapper(request) {
+                public String getMethod(){
+                    return "GET";
+                }
+            };
+            request.getRequestDispatcher("/users?friendId=" + friendId).forward(requestWrapper, response);
+        }
     }
 }
